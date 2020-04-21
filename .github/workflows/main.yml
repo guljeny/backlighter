@@ -1,0 +1,45 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run-script build
+
+    - name: pull repo
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          cd /root/backlighter
+          git fetch --all
+          git reset --hard origin/master
+          npm install
+          rm -rf ./dist
+          mkdir dist
+        host: ${{ secrets.HOST}}
+        user: ${{ secrets.USER}}
+        key: ${{ secrets.SSH_PRIVATE_KEY}}
+
+    - name: Deploy client to Server
+      uses: easingthemes/ssh-deploy@v2.1.1
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SOURCE: "dist/client/"
+        REMOTE_HOST: ${{ secrets.HOST}}
+        REMOTE_USER: ${{ secrets.USER}}
+        TARGET: "/root/backlighter/dist/client"
