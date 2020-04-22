@@ -10,5 +10,5 @@ button.addEventListener('click', () => {
 
 socket.on('toggle-enable', next => {
   en = next
-  button.innerHTML = en ? "off" : "enable"
-});
+  button.innerHTML = en ? 'off' : 'enable'
+})
