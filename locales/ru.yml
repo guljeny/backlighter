@@ -1,0 +1,8 @@
+errors:
+  user:
+    email_is_empty: Емэйл не может быть пустым
+    email_invalid: Неверный формат емэйла
+    password_to_short: Пароль должен быть не менее 8 символов
+    already_exists: Емэйл уже зарегистрирован в системе
+    passord_do_not_match: Пароли не совпадают
+    not_be_empty: Не может быть пустым

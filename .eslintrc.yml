@@ -18,5 +18,8 @@ plugins:
   - react
 rules: {
   semi: ["error", "never"],
-  arrow-parens: ["error", "as-needed"]
+  arrow-parens: ["error", "as-needed"],
+  space-before-function-paren: ["error", "always"],
+  import/no-unresolved: 0,
+  no-shadow: 0,
 }

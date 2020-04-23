@@ -1,39 +1,35 @@
 const app = require('express')()
 const socketIO = require('socket.io')
 const path = require('path')
-const { MongoClient } = require('mongodb')
-const config = require('../src/config')
-
-const url = `mongodb://${config.db_user}:${config.db_password}@${config.db_url}/?authMechanism=DEFAULT`
-const client = new MongoClient(url)
-
-client.connect(() => {
-  console.log('Connected correctly to server')
-  client.close()
-})
+const bodyParser = require('body-parser')
+const bootstrapApi = require('$app/api')
+const initApplication = require('./initApplication')
 
 let en = false
 
-app.get('/', (req, res) => {
-  console.log('request')
-  res.sendFile(path.join(__dirname, '../src/client/index.html'))
-})
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
-app.get('/build/index.js', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/client/bundle.js'))
-})
+initApplication(() => {
+  bootstrapApi(app)
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../src/client/index.html'))
+  })
 
-const server = app.listen(process.env.PORT || 3000)
+  app.get('/build/index.js', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/client/bundle.js'))
+  })
 
-const io = socketIO.listen(server)
+  const server = app.listen(process.env.PORT || 3000)
 
-io.on('connection', socket => {
-  console.log('a user connected')
-  socket.emit('toggle-enable', en)
-  socket.on('toggle-enable', next => {
-    en = next
+  const io = socketIO.listen(server)
+
+  io.on('connection', socket => {
     socket.emit('toggle-enable', en)
-    socket.broadcast.emit('toggle-enable', en)
-    console.log(en)
+    socket.on('toggle-enable', next => {
+      en = next
+      socket.emit('toggle-enable', en)
+      socket.broadcast.emit('toggle-enable', en)
+    })
   })
 })
