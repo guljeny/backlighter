@@ -7,7 +7,7 @@
     "start-dev": "NODE_ENV=development npm run server && npm run mongod && npx webpack --watch",
     "start": "NODE_ENV=production PORT=80 pm2 start ecosystem.config.js && npm run mongod",
     "server": "pm2 start ecosystem.config.js",
-    "mongod": "mongod --config ~/projects/backlighter/mongod.conf  --fork --logpath /dev/null",
+    "mongod": "mongod --config ./mongod.conf  --fork --logpath /dev/null",
     "build": "NODE_ENV=production npx webpack -p",
     "lint": "npx eslint ./src && npx eslint ./app",
     "test": "echo \"Error: no test specified\" && exit 1",
