@@ -5,7 +5,7 @@
   "main": "app/index.js",
   "scripts": {
     "start-dev": "NODE_ENV=development npm run server && npm run mongod && npx webpack --watch",
-    "start": "NODE_ENV=production PORT=80 pm2 start ecosystem.config.js && npm run mongod",
+    "start": "NODE_ENV=production PORT=80 npm run server && npm run mongod",
     "server": "pm2 start ecosystem.config.js",
     "mongod": "mongod --config ./mongod.conf  --fork --logpath /dev/null",
     "build": "NODE_ENV=production npx webpack -p",
@@ -43,6 +43,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
+    "html-webpack-plugin": "^4.2.0",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
   }

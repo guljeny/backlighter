@@ -33,12 +33,10 @@ initApplication(() => {
   console.log('starting app ...')
   bootstrapApi(app)
   app.get('/', (req, res) => {
-    req.session.count = req.session.count ? req.session.count + 1 : 1
-    console.log(req.session)
-    res.sendFile(path.join(__dirname, '../src/client/index.html'))
+    res.sendFile(path.join(__dirname, '../dist/client/index.html'))
   })
 
-  app.get('/build/index.js', (req, res) => {
+  app.get('/bundle.js', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/client/bundle.js'))
   })
 
