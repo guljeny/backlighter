@@ -6,3 +6,4 @@ errors:
     already_exists: Емэйл уже зарегистрирован в системе
     passord_do_not_match: Пароли не совпадают
     not_be_empty: Не может быть пустым
+    wrong_data: Неправильный логин или пароль

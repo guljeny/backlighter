@@ -3,13 +3,13 @@ const db = require('$db')
 
 class User {
   static async findBy (req) {
+    if (req.password) req.password = md5(req.password)
     const user = await db.collection('users').findOne(req)
     return user && new User(user)
   }
 
-  static async register ({ email, password, ...rest }) {
+  static async register ({ password, ...rest }) {
     const data = {
-      email,
       ...rest,
       password: md5(password),
     }
@@ -18,6 +18,7 @@ class User {
   }
 
   constructor (user) {
+    if (!user) throw new Error('no user provided in User.constructor')
     this.user = user
   }
 

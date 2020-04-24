@@ -15,7 +15,9 @@ async function register (req, res) {
     return
   }
   const registeredUser = await User.register({ email, password })
-  response.success(res, registeredUser.values())
+  const userData = registeredUser.values()
+  req.session.userId = userData.id
+  response.success(res, userData)
 }
 
 module.exports = register

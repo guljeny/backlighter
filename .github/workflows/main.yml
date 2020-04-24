@@ -24,17 +24,16 @@ jobs:
     - name: Build
       run: npm run build
 
-    - name: pull repo
+    - name: update project on server
       uses: fifsky/ssh-action@master
       with:
         command: |
           cd /root/backlighter
+          rm -rf ./dist
+          mkdir dist
           git fetch --all
           git reset --hard origin/master
           npm install
-          npm run postinstall
-          rm -rf ./dist
-          mkdir dist
         host: ${{ secrets.HOST}}
         user: ${{ secrets.USER}}
         key: ${{ secrets.SSH_PRIVATE_KEY}}

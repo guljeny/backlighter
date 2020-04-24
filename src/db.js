@@ -1,11 +1,7 @@
 const { MongoClient } = require('mongodb')
-const config = require('$config')
+const { mongoConnectionUrl } = require('$config')
 
-const user = encodeURIComponent(config.db_user)
-const password = encodeURIComponent(config.db_password)
-const url = `mongodb://${user}:${password}@${config.db_url}/?authMechanism=DEFAULT`
-
-const client = new MongoClient(url)
+const client = new MongoClient(mongoConnectionUrl)
 
 class Db {
   constructor () {

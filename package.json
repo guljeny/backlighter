@@ -10,8 +10,7 @@
     "mongod": "mongod --config ./mongod.conf  --fork --logpath /dev/null",
     "build": "NODE_ENV=production npx webpack -p",
     "lint": "npx eslint ./src && npx eslint ./app",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "link-module-alias"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jenya Gul",
   "license": "ISC",
@@ -24,9 +23,12 @@
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "connect-mongodb-session": "^2.3.1",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "install": "^0.13.0",
     "js-md5": "^0.7.3",
+    "module-alias": "^2.2.2",
     "mongodb": "^3.5.6",
     "npm": "^6.14.4",
     "react": "^16.13.1",
@@ -41,7 +43,6 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
-    "link-module-alias": "^1.2.0",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
   }
