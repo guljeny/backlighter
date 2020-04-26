@@ -1,44 +1,16 @@
 require('module-alias/register')
-const app = require('express')()
 const socketIO = require('socket.io')
-const path = require('path')
-const bodyParser = require('body-parser')
-const session = require('express-session')
-const MongoDBStore = require('connect-mongodb-session')(session)
 const bootstrapApi = require('$app/api')
-const { mongoConnectionUrl } = require('$config')
+const bootstrapStaticServer = require('$app/bootstrapStaticServer')
 const initApplication = require('./initApplication')
-
-const store = new MongoDBStore({
-  uri: mongoConnectionUrl,
-  databaseName: 'main',
-  collection: 'sessions',
-})
+const logger = require('$utils/logger')
 
 let en = false
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-app.use(session({
-  secret: 'mongo-session-secret',
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7 * 30,
-  },
-  store,
-  resave: true,
-  saveUninitialized: true,
-}))
-
-initApplication(() => {
-  console.log('starting app ...')
+initApplication(app => {
   bootstrapApi(app)
-  app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../dist/client/index.html'))
-  })
-
-  app.get('/bundle.js', (req, res) => {
-    res.sendFile(path.join(__dirname, '../dist/client/bundle.js'))
-  })
+  bootstrapStaticServer(app)
+  logger('starting app', '...')
 
   const server = app.listen(process.env.PORT || 3000)
 

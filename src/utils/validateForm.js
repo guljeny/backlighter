@@ -1,6 +1,6 @@
 function email ({ email }) {
   if (!email || !email.length) return ['errors.user.email_is_empty']
-  if (!/.*@.*\..*/.test(email)) return ['errors.user.email_invalid']
+  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) return ['errors.user.email_invalid']
   return null
 }
 
@@ -11,7 +11,7 @@ function password ({ password }) {
 
 function repeatPassword ({ password, repeatPassword }) {
   if (!repeatPassword) return ['errors.user.not_be_empty']
-  if (password !== repeatPassword) return ['errors.user.password_do_not_match']
+  if (password && password !== repeatPassword) return ['errors.user.password_do_not_match']
   return null
 }
 
@@ -21,7 +21,7 @@ const validators = {
   repeatPassword,
 }
 
-function validateForm (formData) {
+export default function validateForm (formData) {
   const errors = Object.keys(formData).reduce((acc, key) => {
     if (!validators[key]) return acc
     const errors = validators[key](formData)
@@ -33,5 +33,3 @@ function validateForm (formData) {
   }, {})
   return Object.keys(errors).length ? errors : null
 }
-
-module.exports = validateForm

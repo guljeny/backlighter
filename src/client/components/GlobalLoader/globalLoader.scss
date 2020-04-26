@@ -1,0 +1,32 @@
+@import 'src/client/styles/colors';
+
+@keyframes color-change {
+  0% {
+    fill: $dark-gray;
+  }
+  100% {
+    fill: $primary;
+  }
+}
+
+.global-loader {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    width: 60px;
+  }
+  &_lightning {
+    animation: color-change 1s linear infinite alternate both;
+  }
+  &_lamp {
+    fill: $dark-gray;
+  }
+}

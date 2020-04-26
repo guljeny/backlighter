@@ -1,7 +1,7 @@
 const response = require('$utils/response')
 const User = require('$app/models/User')
 
-async function login (req, res) {
+module.exports = async function login (req, res) {
   const { email, password } = req.body
   const user = await User.findBy({ email, password })
   if (!user) {
@@ -12,5 +12,3 @@ async function login (req, res) {
   req.session.userId = userData.id
   response.success(res, userData)
 }
-
-module.exports = login

@@ -1,0 +1,13 @@
+@import './styles/colors';
+@import './styles/elements';
+@import './styles/popup';
+
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}

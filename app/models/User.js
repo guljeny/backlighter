@@ -1,9 +1,15 @@
+const { ObjectID } = require('mongodb')
 const md5 = require('js-md5')
 const db = require('$db')
 
-class User {
+module.exports = class User {
   static async findBy (req) {
     if (req.password) req.password = md5(req.password)
+    if (req.hasOwnProperty('id')) {
+      // eslint-disable-next-line no-underscore-dangle
+      req._id = req.id && ObjectID(req.id)
+      delete req.id
+    }
     const user = await db.collection('users').findOne(req)
     return user && new User(user)
   }
@@ -27,8 +33,7 @@ class User {
     return {
       id: _id,
       email,
+      authorized: true,
     }
   }
 }
-
-module.exports = User

@@ -1,9 +1,10 @@
-const register = require('./register')
-const login = require('./login')
+const { register, login, user, logout } = require('./user')
+const translations = require('./translations')
 
-function bootstrapApi (app) {
-  app.post('/api/register', register)
-  app.post('/api/login', login)
+module.exports = function bootstrapApi (app) {
+  app.get('/api/user', user)
+  app.post('/api/user/register', register)
+  app.post('/api/user/login', login)
+  app.get('/api/user/logout', logout)
+  app.get('/api/translations/:locale', translations)
 }
-
-module.exports = bootstrapApi

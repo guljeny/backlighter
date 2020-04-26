@@ -1,0 +1,99 @@
+@keyframes button-loader {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-29px);
+  }
+}
+.btn {
+  background: $primary;
+  border: none;
+  position: relative;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: white;
+  outline: none;
+  overflow: hidden;
+  z-index: 0;
+  &.as-link {
+    background: transparent;
+    margin: 0;
+    padding: 0 2px;
+    border-bottom: 1px solid white;
+    &:hover {
+      background: transparent;
+      border-bottom: none;
+    }
+  }
+  &.bordered {
+    background: transparent;
+    &:before {
+      content: '';
+      box-sizing: border-box;
+      z-index: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 2px solid $primary;
+    }
+  }
+  &:disabled {
+    pointer-events: none;
+    background: #afccc8;
+  }
+  &.loading {
+    background: $primary;
+    &:after {
+      content: '';
+      z-index: 2;
+      position: absolute;
+      top: -2px;
+      bottom: -2px;
+      left: -2px;
+      width: 200%;
+      background: repeating-linear-gradient(45deg, #ffffff00, #ffffff00 10px, #ffffff52 10px, #ffffff52 20px);
+      animation: button-loader .7s linear infinite;
+    }
+  }
+  &:hover {
+    background: darken($primary, 10);
+    border-color: darken($primary, 10);
+    cursor: pointer;
+  }
+}
+
+input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid #1db9a3;
+  padding: 4px;
+  font-size: 14px;
+  transition: .2s;
+  &:focus {
+    border-color: darken($primary, 10);
+  }
+}
+
+.form-field {
+  margin-bottom: 15px;
+  &--error {
+    input {
+      background: #ffebeb;
+      border-color: #b93737;
+    }
+  }
+  &__errors {
+    margin-top: 5px;
+    font-size: 12px;
+    color: $red;
+    span {
+      display: block;
+    }
+  }
+}

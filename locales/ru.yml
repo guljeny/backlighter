@@ -1,9 +1,23 @@
 errors:
   user:
-    email_is_empty: Емэйл не может быть пустым
-    email_invalid: Неверный формат емэйла
+    email_is_empty: E-mail не может быть пустым
+    email_invalid: E-mail имеет неверный формат
     password_to_short: Пароль должен быть не менее 8 символов
-    already_exists: Емэйл уже зарегистрирован в системе
-    passord_do_not_match: Пароли не совпадают
+    already_exists: E-mail уже зарегистрирован в системе
+    password_do_not_match: Пароли не совпадают
     not_be_empty: Не может быть пустым
     wrong_data: Неправильный логин или пароль
+fields:
+  email: E-mail
+  password: Пароль
+  repeat_password: Повторите пароль
+buttons:
+  login: Войти
+  register: Регистрация
+  logout: Выход
+login_popup:
+  title: Вход
+  not_registered: Еще не зарегестрированы?
+register_popup:
+  title: Регистрация
+  not_registered: Уже есть аккаунт?

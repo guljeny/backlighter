@@ -5,13 +5,15 @@ env:
 extends:
   - 'airbnb'
   - 'eslint:recommended'
-  # - 'plugin:react/recommended'
+  - 'plugin:react/recommended'
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
+parser: "babel-eslint"
 parserOptions:
   ecmaFeatures:
     jsx: true
+    experimentalObjectRestSpread: true
   ecmaVersion: 2018
   sourceType: module
 plugins:
@@ -22,4 +24,19 @@ rules: {
   space-before-function-paren: ["error", "always"],
   import/no-unresolved: 0,
   no-shadow: 0,
+  react/jsx-filename-extension: [1, { "extensions": [".js", ".jsx"] }],
+  react/state-in-constructor: 0,
+  react/button-has-type: 0,
+  func-names: 0,
+  import/extensions: 0,
+  quote-props: 0,
+  react/prop-types: 0,
+  jsx-a11y/control-has-associated-label: 0,
+  no-unused-expressions: 0,
+  import/no-named-as-default: 0,
+  object-curly-newline: 0,
+  jsx-a11y/no-static-element-interactions: 0,
+  jsx-a11y/click-events-have-key-events: 0,
+  react/jsx-props-no-spreading: 0,
+  no-prototype-builtins: 0,
 }

@@ -2,7 +2,7 @@ const validateForm = require('$utils/validateForm')
 const response = require('$utils/response')
 const User = require('$app/models/User')
 
-async function register (req, res) {
+module.exports = async function register (req, res) {
   const { email, password, repeatPassword } = req.body
   const errors = validateForm({ email, password, repeatPassword })
   if (errors) {
@@ -19,5 +19,3 @@ async function register (req, res) {
   req.session.userId = userData.id
   response.success(res, userData)
 }
-
-module.exports = register
