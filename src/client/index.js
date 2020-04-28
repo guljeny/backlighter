@@ -12,8 +12,7 @@ import App from './App'
 // })
 
 // socket.on('toggle-enable', next => {
-//   en = next
-//   button.innerHTML = en ? 'off' : 'enable'
+//   console.log(next)
 // })
 
 function bootstrap () {

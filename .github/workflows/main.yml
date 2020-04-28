@@ -9,6 +9,60 @@ on:
     branches: [ master ]
 
 jobs:
+  build-firmvare:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+
+    - name: git diff
+      id: build_info
+      run: |
+        echo "::set-output name=is_changed::$(git diff-tree --no-commit-id --name-only --diff-filter=AM -r ${{ github.sha }} | grep version.txt | wc -l)"
+
+    - name: install arduino cli
+      if: steps.build_info.outputs.is_changed > 0
+      run:  curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+
+    - name: install socket.io lib
+      if: steps.build_info.outputs.is_changed > 0
+      run: sudo ./bin/arduino-cli lib install SocketIoClient
+
+    - name: install WebSocketsClient lib
+      if: steps.build_info.outputs.is_changed > 0
+      run: sudo ./bin/arduino-cli lib install WebSockets
+
+    - name: add esp8266 lib
+      if: steps.build_info.outputs.is_changed > 0
+      run: sudo ./bin/arduino-cli core update-index --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json
+
+    - name: install esp8266
+      if: steps.build_info.outputs.is_changed > 0
+      run: sudo ./bin/arduino-cli core install esp8266:esp8266 --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json  
+
+    - name: install python3
+      if: steps.build_info.outputs.is_changed > 0
+      run: sudo apt-get install -yq python3
+
+    - name: compile
+      if: steps.build_info.outputs.is_changed > 0
+      run: |
+        npm run create-version.h
+        npm run create-connect-page.h
+        sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./src/esp8266_firmware/esp8266_firmware.ino -o ./src/esp8266_firmware/esp8266_latest.bin
+
+    - name: Deploy firmvare to Server
+      if: steps.build_info.outputs.is_changed > 0
+      uses: easingthemes/ssh-deploy@v2.1.1
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        REMOTE_HOST: ${{ secrets.HOST}}
+        REMOTE_USER: ${{ secrets.USER}}
+        SOURCE: "src/esp8266_firmware/esp8266_latest.bin"
+        TARGET: "/root/backlighter/dist/esp8266_firmware/"
+
   build:
     runs-on: ubuntu-latest
 
@@ -29,7 +83,7 @@ jobs:
       with:
         command: |
           cd /root/backlighter
-          rm -rf ./dist
+          rm -rf ./dist/client
           mkdir dist
           git fetch --all
           git reset --hard origin/master
@@ -42,7 +96,7 @@ jobs:
       uses: easingthemes/ssh-deploy@v2.1.1
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        SOURCE: "dist/client/"
         REMOTE_HOST: ${{ secrets.HOST}}
         REMOTE_USER: ${{ secrets.USER}}
+        SOURCE: "dist/client/"
         TARGET: "/root/backlighter/dist/client"
