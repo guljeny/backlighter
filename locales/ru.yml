@@ -11,13 +11,15 @@ fields:
   email: E-mail
   password: Пароль
   repeat_password: Повторите пароль
+  devise_name: Название устройства
 buttons:
   login: Войти
   register: Регистрация
   logout: Выход
+  add: Добавить
 login_popup:
   title: Вход
   not_registered: Еще не зарегестрированы?
 register_popup:
   title: Регистрация
-  not_registered: Уже есть аккаунт?
+  already_registered: Уже есть аккаунт?

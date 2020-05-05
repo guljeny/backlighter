@@ -1,8 +1,8 @@
 import store from '$store'
-import request from '$utils/request'
 import { clearUser } from '$actions/user'
+import api from '$api/user'
 
 export default async function () {
-  const { success } = await request.get('api/user/logout')
+  const { success } = await api.logout()
   if (success) store.dispatch(clearUser())
 }

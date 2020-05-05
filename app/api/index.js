@@ -1,6 +1,6 @@
 const app = require('$app/app')
 const { register, login, user, logout } = require('./user')
-const { add } = require('./devise')
+const { add, list, power, bright } = require('./devise')
 const translations = require('./translations')
 
 module.exports = function bootstrapApi () {
@@ -9,5 +9,9 @@ module.exports = function bootstrapApi () {
   app.post('/api/user/login', login)
   app.get('/api/user/logout', logout)
   app.get('/api/devise/add', add)
+  app.get('/api/devise/list', list)
+  app.get('/api/devise/enable', power.enable)
+  app.get('/api/devise/disable', power.disable)
+  app.get('/api/devise/bright', bright)
   app.get('/api/translations/:locale', translations)
 }

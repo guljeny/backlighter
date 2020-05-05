@@ -10,7 +10,7 @@
 SocketIoClient webSocket;
 ESP8266WebServer server(80);
 
-#define TXD 0
+#define TXD 16
 char chipId[33];
 char coreId[33];
 
@@ -102,6 +102,28 @@ int getOwner () {
   return EEPROM.read(71);
 }
 
+void setEnabled (int val) {
+  EEPROM.begin(512);
+  EEPROM.write(72, val);
+  EEPROM.commit();
+}
+
+int getEnabled () {
+  EEPROM.begin(512);
+  return EEPROM.read(72);
+}
+
+void setBright (int val) {
+  EEPROM.begin(512);
+  EEPROM.write(73, val);
+  EEPROM.commit();
+}
+
+int getBright () {
+  EEPROM.begin(512);
+  return EEPROM.read(73);
+}
+
 void connectToWifi(String ssid, String pass) {
   status = "wait";
   connectStart = millis();
@@ -120,42 +142,19 @@ void startAP () {
   server.begin();
 }
 
-void setup() {
-  Serial.begin(115200);
-  Serial.println();
-  pinMode(TXD, OUTPUT);
-
-  ultoa(ESP.getChipId(), chipId, 10);
-  ultoa(ESP.getFlashChipId(), coreId, 10);
-  strcat(ssidName, "Lamp-");
-  strcat(ssidName, chipId);
-  strcat(uid, chipId);
-  strcat(uid, coreId);
-
-  int onCount = getOnCount() + 1;
-
-  String ssid = getSsid();
-  String pass = getPass();
-  Serial.println(ssidName);
-  if (ssid.length() && pass.length() && onCount < 5) {
-    setOnCount(onCount);
-    connectToWifi(ssid, pass);
+void toggleEnable (const char * enable, size_t length) {
+  if (strcmp(enable,"true")==0) {
+    setEnabled(1);
+    lightControl();
   } else {
-    setOnCount(0);
-    startAP();
+    setEnabled(0);
+    lightControl();
   }
-
-  delayStart = millis();
-  delayRunning = true;
-  /* ESPhttpUpdate.update("195.2.93.153", 80, "/esp8266/last"); */
 }
 
-void toggle (const char * enable, size_t length) {
-  if (strcmp(enable,"true")==0) {
-    digitalWrite(TXD, HIGH);
-  } else {
-    digitalWrite(TXD, LOW);
-  }
+void updateBright (const char * bright, size_t length) {
+  setBright(atoi(bright));
+  lightControl();
 }
 
 void startConnection (const char * enable, size_t length) {
@@ -174,7 +173,48 @@ void verifyOwner (const char * enable, size_t length) {
   }
 }
 
+void lightControl () {
+  int enabled = getEnabled();
+  int bright = getBright();
+  analogWrite(TXD, 255 - bright * enabled);
+}
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println();
+  pinMode(TXD, OUTPUT);
+  analogWriteRange(255);
+  lightControl();
+
+  ultoa(ESP.getChipId(), chipId, 10);
+  ultoa(ESP.getFlashChipId(), coreId, 10);
+  strcat(ssidName, "Lamp-");
+  strcat(ssidName, chipId);
+  strcat(uid, chipId);
+  strcat(uid, coreId);
+
+  int onCount = getOnCount() + 1;
+
+  String ssid = getSsid();
+  String pass = getPass();
+  Serial.println(ssid);
+  Serial.println(pass);
+  Serial.println(onCount);
+  if (ssid.length() && pass.length() && onCount < 5) {
+    setOnCount(onCount);
+    connectToWifi(ssid, pass);
+  } else {
+    setOnCount(0);
+    startAP();
+  }
+
+  delayStart = millis();
+  delayRunning = true;
+  /* ESPhttpUpdate.update("195.2.93.153", 80, "/esp8266/last"); */
+}
+
 void loop() {
+  /* Serial.println(status); */
   server.handleClient();
   if (strcmp(status, "connect") == 0) {
     webSocket.loop();
@@ -189,9 +229,12 @@ void loop() {
     webSocket.begin("195.2.93.153");
     webSocket.on("connect", startConnection);
     webSocket.on("VERIFY_OWNER", verifyOwner);
+    webSocket.on("DEVISE_ENABLE", toggleEnable);
+    webSocket.on("DEVISE_BRIGHT", updateBright);
     status="connect";
   }
   if ((strcmp(status, "wait")==0 && millis() - connectStart > 15000) || WiFi.status() == WL_CONNECT_FAILED ) {
+    startAP();
     status="error";
   }
 }

@@ -16,7 +16,7 @@ export default function ({ name, children }) {
   })
   const withError = touched[name] && errors[name]
   return (
-    <div className={classnames('form-field', withError && 'form-field--error')}>
+    <div className={classnames('form__field', withError && 'form__field--error')}>
       {childrenWithFormik}
       {touched[name] && <Errors errors={errors[name]} />}
     </div>

@@ -6,28 +6,39 @@
     transform: translateX(-29px);
   }
 }
+
 .btn {
-  background: $primary;
   border: none;
   position: relative;
   padding: 8px 20px;
   font-size: 14px;
-  color: white;
   outline: none;
   overflow: hidden;
   z-index: 0;
-  &.as-link {
-    background: transparent;
-    margin: 0;
-    padding: 0 2px;
-    border-bottom: 1px solid white;
+  &--primary {
+    background: $primary;
+    color: white;
     &:hover {
-      background: transparent;
-      border-bottom: none;
+      background: darken($primary, 10);
+      cursor: pointer;
     }
   }
-  &.bordered {
+  &--as-link {
+    color: $dark-gray;
     background: transparent;
+    margin: 0;
+    padding: 0 4px;
+    border-bottom: 1px solid $dark-gray;
+    &:hover {
+      background: transparent;
+      border-color: $primary;
+      color: $primary;
+      cursor: pointer;
+    }
+  }
+  &--outline {
+    background: transparent;
+    color: $primary;
     &:before {
       content: '';
       box-sizing: border-box;
@@ -39,12 +50,13 @@
       height: 100%;
       border: 2px solid $primary;
     }
+    &:hover {
+      background: darken($primary, 10);
+      color: #fff;
+      cursor: pointer;
+    }
   }
-  &:disabled {
-    pointer-events: none;
-    background: #afccc8;
-  }
-  &.loading {
+  &--loading {
     background: $primary;
     &:after {
       content: '';
@@ -58,10 +70,9 @@
       animation: button-loader .7s linear infinite;
     }
   }
-  &:hover {
-    background: darken($primary, 10);
-    border-color: darken($primary, 10);
-    cursor: pointer;
+  &:disabled {
+    pointer-events: none;
+    background: #afccc8;
   }
 }
 
@@ -80,12 +91,18 @@ input {
   }
 }
 
-.form-field {
-  margin-bottom: 15px;
-  &--error {
-    input {
-      background: #ffebeb;
-      border-color: #b93737;
+.form {
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+  &__field {
+    margin-bottom: 15px;
+    &--error {
+      input {
+        background: #ffebeb;
+        border-color: #b93737;
+      }
     }
   }
   &__errors {
@@ -95,5 +112,12 @@ input {
     span {
       display: block;
     }
+  }
+  &__bottom-text {
+    padding-top: 10px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+    border-top: 1px solid #efefef;
   }
 }

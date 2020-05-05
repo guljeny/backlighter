@@ -1,8 +1,9 @@
 const io = require('$app/socketIO')
 const Devise = require('$app/models/Devise')
-const { devisesStore } = require('./stores')
+const User = require('$app/models/User')
+const { devisesStore, usersStore } = require('./stores')
+const { VERIFY_OWNER, DEVISE_ENABLE, DEVISE_BRIGHT } = require('./actions')
 
-const devices = []
 module.exports = function bootstrapSockets () {
   io.on('connection', socket => {
     socket.on('DEVISE_CONNECTION', async ({ uid, version }) => {
@@ -10,23 +11,52 @@ module.exports = function bootstrapSockets () {
       let devise = await Devise.findBy({ uid })
       if (!devise) {
         devise = await Devise.add({ uid, version })
-      } else if (devise.getVersion() !== version) {
-        devise.setVersion(version)
       }
-      // TODO: send sockets with devise info to device
-      if (devise.getNewOwner()) socket.emit('VERIFY_OWNER')
-      // const owner = devise.getOwner()
-      // if (!owner) return
-      // TODO: notify owner about devise onlie
+      devise.update({ version, isOnline: true })
+      socket.emit(DEVISE_ENABLE, devise.get('enabled'))
+      socket.emit(DEVISE_BRIGHT, devise.get('bright'))
+      if (devise.get('newOwner')) socket.emit('VERIFY_OWNER')
+      const owner = devise.get('owner')
+      if (!owner) return
+      const users = usersStore.findByUserId(owner)
+      if (users) {
+        users.forEach(({ socketId }) => {
+          io.to(socketId).emit('DEVISES:UPDATE', { uid, isOnline: true })
+        })
+      }
     })
-    socket.on('VERIFY_OWNER', async () => {
+    socket.on(VERIFY_OWNER, async () => {
       const uid = devisesStore.findBySocketId(socket.id)
+      if (!uid) return
       const devise = await Devise.findBy({ uid })
       devise.setIsVerified()
       // notify owner if online with new devise
     })
-    socket.on('disconnect', () => {
-      devices.filter(({ id }) => id !== socket.id)
+    socket.on('USER_CONNECTION', async id => {
+      const user = await User.findBy({ id })
+      if (!user) return
+      usersStore.addItem({ id, socketId: socket.id })
+    })
+    socket.on('disconnect', async () => {
+      const uid = devisesStore.findBySocketId(socket.id)
+      if (uid) {
+        const deviseSockets = devisesStore.findByUid(uid)
+        if (deviseSockets && deviseSockets.all.length === 1) {
+          const devise = await Devise.findBy({ uid })
+          devise.update({ isOnline: false })
+          const users = usersStore.findByUserId(devise.get('owner'))
+          if (users) {
+            users.forEach(({ socketId }) => {
+              io.to(socketId).emit('DEVISES:UPDATE', { uid, isOnline: false })
+            })
+          }
+        }
+        devisesStore.delete(socket.id)
+      }
+      const users = usersStore.findBySocketId(socket.id)
+      if (users) {
+        usersStore.delete(socket.id)
+      }
     })
   })
 }

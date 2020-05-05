@@ -16,6 +16,7 @@
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, .3);
+    z-index: 99;
   }
   &-close {
     position: absolute;
@@ -60,9 +61,5 @@
       width: 4px;
       background: $primary;
     }
-  }
-  &-buttons {
-    display: flex;
-    justify-content: flex-end;
   }
 }

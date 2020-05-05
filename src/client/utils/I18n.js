@@ -4,7 +4,7 @@ let locales = null
 
 export async function init () {
   // TODO: detect locale before request
-  const { success, payload } = await request.get('api/translations/ru')
+  const { success, payload } = await request.get('/api/translations/ru')
   if (!success) throw new Error('Cannot get locales')
   locales = payload
   return locales

@@ -13,10 +13,41 @@ module.exports = class Devise {
       owner,
       verified: false,
       addTime: Date.now(),
+      enabled: true,
+      bright: 255,
+      R: 255,
+      G: 255,
+      B: 255,
       ...rest,
     }
     const { ops } = await db.collection('divises').insertOne(data)
     return new Devise(ops[0])
+  }
+
+  static async listForOwner (owner) {
+    const devises = await db.collection('divises')
+      .find({ owner })
+      .map(({
+        name,
+        uid,
+        enabled,
+        isOnline,
+        bright,
+        R,
+        G,
+        B,
+      }) => ({
+        name,
+        uid,
+        enabled,
+        isOnline,
+        bright,
+        R,
+        G,
+        B,
+      }))
+      .toArray()
+    return devises
   }
 
   constructor (devise) {
@@ -24,34 +55,17 @@ module.exports = class Devise {
     this.devise = devise
   }
 
-  getOwner () {
-    return this.devise.owner
+  get (key) {
+    return this.devise[key]
   }
 
-  getNewOwner () {
-    return this.devise.newOwner
-  }
-
-  getVersion () {
-    return this.devise.version
-  }
-
-  async setVersion (version) {
+  async update (values) {
     const { uid } = this.devise
     await db.collection('divises').updateOne(
       { uid },
-      { $set: { version } },
+      { $set: values },
     )
-    this.devise.version = version
-  }
-
-  async addOwner (id) {
-    const { uid } = this.devise
-    await db.collection('divises').updateOne(
-      { uid },
-      { $set: { newOwner: id } },
-    )
-    this.devise.newOwner = id
+    this.devise = { ...this.devise, ...values }
   }
 
   isVerefied () {
@@ -59,16 +73,13 @@ module.exports = class Devise {
   }
 
   async setIsVerified () {
-    const { uid, newOwner } = this.devise
-    const update = {
+    const { newOwner, newName } = this.devise
+    await this.update({
       verified: true,
       owner: newOwner,
+      name: newName,
       newOwner: null,
-    }
-    await db.collection('divises').updateOne(
-      { uid },
-      { $set: update },
-    )
-    this.devise = { ...this.devise, ...update }
+      newName: null,
+    })
   }
 }

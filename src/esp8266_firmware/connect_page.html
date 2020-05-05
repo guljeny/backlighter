@@ -30,7 +30,7 @@
       chnet=async()=>{
         try {
           const r = await fetch('http://195.2.93.153/check_connection');
-          if(r.status==200){window.location.replace(`http://195.2.93.153/add_devise/${id}`);return;}
+          if(r.status==200){window.location.replace(`http://195.2.93.153/devise/add/${id}`);return;}
           throw new Error();
         }catch(err){setTimeout(chnet,2000)};
       },

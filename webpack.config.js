@@ -8,14 +8,18 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist/client/'),
     filename: `bundle${process.env.NODE_ENV === 'production' ? '.[hash]' : ''}.js`,
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
       '$actions': path.resolve(__dirname, 'src/client/actions/'),
+      '$api': path.resolve(__dirname, 'src/client/api/'),
       '$utils': path.resolve(__dirname, 'src/client/utils/'),
+      '$socket': path.resolve(__dirname, 'src/client/socket/'),
       '$common_utils': path.resolve(__dirname, 'src/utils/'),
       '$components': path.resolve(__dirname, 'src/client/components/'),
+      '$modules': path.resolve(__dirname, 'src/client/modules/'),
       '$store': path.resolve(__dirname, 'src/client/store.js'),
     },
   },

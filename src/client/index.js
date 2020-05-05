@@ -1,9 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-// import io from 'socket.io-client'
 import App from './App'
+import { bootstrapSockets } from './socket'
 
-// const socket = io()
 // const button = document.getElementById('toggle-button')
 // let en = false
 
@@ -19,6 +18,7 @@ function bootstrap () {
   const container = document.getElementById('root')
   if (!container) return
   ReactDOM.render(<App />, container)
+  bootstrapSockets()
 }
 
 bootstrap()

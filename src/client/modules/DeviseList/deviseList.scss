@@ -1,0 +1,75 @@
+@import 'src/client/styles/colors';
+
+.devise-list {
+  &__wrapper {
+    margin: 0 -10px;
+  }
+  &__item-wrapper {
+    position: relative;
+    margin: 0 10px 20px;
+    display: inline-block;
+    width: calc(50% - 20px);
+    background: grey;
+    background: #fbfbfb;
+    padding: 15px;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    &--offline {
+      .devise-list__item {
+        filter: blur(2px);
+      }
+    }
+  }
+  &__item {
+    display: flex;
+  }
+  &__offline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $dark-gray;
+  }
+  &__item-content {
+    width: 100%;
+    margin-left: 20px;
+  }
+  &__power-button {
+    &--enabled {
+      .devise-list__power-button-content {
+        background: #64d678;
+        box-shadow: 0 0 14px #64d778;
+      }
+    }
+    &-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #e46262;
+      box-shadow: 0 0 14px #e46261;
+      border-radius: 50%;
+      transition: .2s;
+      svg {
+        width: 20px;
+        transition: .2s;
+        path {
+          fill: #fff;
+        }
+      }
+      &:hover {
+        cursor: pointer;
+        svg {
+          width: 22px;
+        }
+      }
+    }
+  }
+}

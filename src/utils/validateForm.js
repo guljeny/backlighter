@@ -15,10 +15,22 @@ function repeatPassword ({ password, repeatPassword }) {
   return null
 }
 
+function deviseName ({ deviseName }) {
+  if (!deviseName) return ['errors.user.not_be_empty']
+  return null
+}
+
+function uid ({ uid }) {
+  if (!uid) return ['errors.user.not_be_empty']
+  return null
+}
+
 const validators = {
   email,
   password,
   repeatPassword,
+  deviseName,
+  uid,
 }
 
 export default function validateForm (formData) {

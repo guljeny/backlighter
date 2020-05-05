@@ -4,8 +4,8 @@ import { closePopup } from '$actions/popups'
 
 export function Popup ({ popup, closePopup }) {
   if (!popup) return null
-  const { Component } = popup
-  return <Component closePopup={closePopup} />
+  const { Component, props, name } = popup
+  return <Component closePopup={() => closePopup(name)} {...props} />
 }
 
 const mapStateToProps = ({ popups }) => ({

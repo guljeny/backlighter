@@ -9,15 +9,14 @@ export default function user (state = initialState, action) {
     case SHOW_POPUP: {
       return {
         popupQueue: [
-          action.payload,
           ...state.popupQueue,
+          action.payload,
         ],
       }
     }
     case CLOSE_POPUP: {
       const popupQueue = [...state.popupQueue]
-      popupQueue.shift()
-      return { popupQueue }
+      return { popupQueue: popupQueue.filter(({ name }) => name !== action.payload) }
     }
     default: {
       return state

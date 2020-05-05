@@ -1,4 +1,6 @@
-async function request (url, body, options = {}) {
+import queryString from 'query-string'
+
+async function request (url, body = null, options = {}) {
   try {
     const res = await fetch(url, {
       headers: {
@@ -21,5 +23,5 @@ async function request (url, body, options = {}) {
 
 export default {
   post: (url, body) => request(url, body, { method: 'POST' }),
-  get: url => request(url, null),
+  get: (url, params) => request(`${url}${params ? '?' : ''}${queryString.stringify(params)}`),
 }

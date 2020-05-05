@@ -1,7 +1,9 @@
+const validateForm = require('$utils/validateForm')
 const response = require('$utils/response')
 const User = require('$app/models/User')
 const Devise = require('$app/models/Devise')
 const { devisesStore } = require('$app/sockets/stores')
+const { VERIFY_OWNER } = require('$app/sockets/actions')
 const socketIO = require('$app/socketIO')
 
 module.exports = async function add (req, res) {
@@ -11,17 +13,18 @@ module.exports = async function add (req, res) {
     response.unauthorized(res)
     return
   }
-  const { uid } = req.query
-  if (!uid) {
-    response.unprocessableEntity(res)
+  const { uid, deviseName } = req.query
+  const errors = validateForm({ uid, deviseName })
+  if (errors) {
+    response.unprocessableEntity(res, errors)
     return
   }
   let devise = await Devise.findBy({ uid })
   if (!devise) devise = await Devise.add({ uid })
-  devise.addOwner(userId)
+  devise.update({ newOwner: userId, newName: deviseName })
   const socketId = devisesStore.findByUid(uid)
   if (socketId) {
-    socketIO.to(socketId).emit('VERIFY_OWNNER')
+    socketIO.to(socketId.last).emit(VERIFY_OWNER)
   }
   response.success(res)
 }

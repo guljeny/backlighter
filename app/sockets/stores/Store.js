@@ -12,7 +12,9 @@ class Store {
   }
 
   findByKey (key, value) {
-    return this.state.find(item => item[key] === value)
+    const items = this.state.filter(item => item[key] === value)
+    if (!items.length) return null
+    return items
   }
 }
 
