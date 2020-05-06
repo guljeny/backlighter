@@ -5,7 +5,7 @@ const { devisesStore } = require('$app/sockets/stores')
 
 module.exports = class Devise {
   static async findBy (req) {
-    const devise = await db.collection('divises').findOne(req)
+    const devise = await db.collection('devises').findOne(req)
     return devise && new Devise(devise)
   }
 
@@ -23,12 +23,12 @@ module.exports = class Devise {
       B: 255,
       ...rest,
     }
-    const { ops } = await db.collection('divises').insertOne(data)
+    const { ops } = await db.collection('devises').insertOne(data)
     return new Devise(ops[0])
   }
 
   static async listForOwner (owner) {
-    const devises = await db.collection('divises')
+    const devises = await db.collection('devises')
       .find({ owner })
       .map(({
         name,
@@ -64,7 +64,7 @@ module.exports = class Devise {
 
   async update (values) {
     const { uid } = this.devise
-    await db.collection('divises').updateOne(
+    await db.collection('devises').updateOne(
       { uid },
       { $set: values },
     )
