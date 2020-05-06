@@ -4,13 +4,13 @@ import reducers from './reducers'
 import rootSaga from './rootSaga'
 
 const sagaMiddleware = createSagaMiddleware()
+// eslint-disable-next-line no-underscore-dangle
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 export default createStore(
   reducers,
-  compose(
+  composeEnhancers(
     applyMiddleware(sagaMiddleware),
-    // eslint-disable-next-line no-underscore-dangle
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   ),
 )
 

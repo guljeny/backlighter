@@ -10,7 +10,7 @@ export default class Bright extends React.Component {
   sendToServer = throttle(bright => {
     const { uid } = this.props
     api.setBright(uid, bright)
-  }, 500)
+  }, 100)
 
   setBright = ({ target }) => {
     const bright = target.value
