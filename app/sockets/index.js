@@ -2,19 +2,16 @@ const io = require('$app/socketIO')
 const Devise = require('$app/models/Devise')
 const User = require('$app/models/User')
 const { devisesStore, usersStore } = require('./stores')
-const { VERIFY_OWNER, DEVISE_ENABLE, DEVISE_BRIGHT } = require('./actions')
+const { VERIFY_OWNER } = require('./actions')
 
 module.exports = function bootstrapSockets () {
   io.on('connection', socket => {
     socket.on('DEVISE_CONNECTION', async ({ uid, version }) => {
       devisesStore.addItem({ uid, id: socket.id })
       let devise = await Devise.findBy({ uid })
-      if (!devise) {
-        devise = await Devise.add({ uid, version })
-      }
+      if (!devise) devise = await Devise.add({ uid, version })
       devise.update({ version, isOnline: true })
-      socket.emit(DEVISE_ENABLE, devise.get('enabled'))
-      socket.emit(DEVISE_BRIGHT, devise.get('bright'))
+      devise.notify()
       if (devise.get('newOwner')) socket.emit('VERIFY_OWNER')
       const owner = devise.get('owner')
       if (!owner) return

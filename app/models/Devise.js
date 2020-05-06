@@ -1,4 +1,7 @@
 const db = require('$db')
+const io = require('$app/socketIO')
+const { DEVISE_STATUS } = require('$app/sockets/actions')
+const { devisesStore } = require('$app/sockets/stores')
 
 module.exports = class Devise {
   static async findBy (req) {
@@ -66,6 +69,13 @@ module.exports = class Devise {
       { $set: values },
     )
     this.devise = { ...this.devise, ...values }
+  }
+
+  notify () {
+    const { uid, enabled, bright, R, G, B } = this.devise
+    const socketId = devisesStore.findByUid(uid)
+    if (!socketId) return
+    io.to(socketId.last).emit(DEVISE_STATUS, `${enabled ? 1 : 0}:${bright}:${R}:${G}:${B}`)
   }
 
   isVerefied () {

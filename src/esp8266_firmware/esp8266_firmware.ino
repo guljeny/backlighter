@@ -23,6 +23,12 @@ char* status = "wait";
 char *ssidName = (char*)malloc(39);
 char *uid = (char*)malloc(68);
 
+int enabled = 1;
+int bright = 255;
+int R = 255;
+int G = 255;
+int B = 255;
+
 void handleRoot() {
   server.send(200, "text/html", connectPage);
 }
@@ -102,26 +108,23 @@ int getOwner () {
   return EEPROM.read(71);
 }
 
-void setEnabled (int val) {
+void saveSatatus () {
   EEPROM.begin(512);
-  EEPROM.write(72, val);
+  EEPROM.write(72, enabled);
+  EEPROM.write(73, bright);
+  EEPROM.write(74, R);
+  EEPROM.write(75, G);
+  EEPROM.write(76, B);
   EEPROM.commit();
 }
 
-int getEnabled () {
+void getSatatus () {
   EEPROM.begin(512);
-  return EEPROM.read(72);
-}
-
-void setBright (int val) {
-  EEPROM.begin(512);
-  EEPROM.write(73, val);
-  EEPROM.commit();
-}
-
-int getBright () {
-  EEPROM.begin(512);
-  return EEPROM.read(73);
+  enabled = EEPROM.read(72);
+  bright = EEPROM.read(73);
+  R = EEPROM.read(74);
+  G = EEPROM.read(75);
+  B = EEPROM.read(76);
 }
 
 void connectToWifi(String ssid, String pass) {
@@ -142,21 +145,6 @@ void startAP () {
   server.begin();
 }
 
-void toggleEnable (const char * enable, size_t length) {
-  if (strcmp(enable,"true")==0) {
-    setEnabled(1);
-    lightControl();
-  } else {
-    setEnabled(0);
-    lightControl();
-  }
-}
-
-void updateBright (const char * bright, size_t length) {
-  setBright(atoi(bright));
-  lightControl();
-}
-
 void startConnection (const char * enable, size_t length) {
   char data[200] = "{\"uid\":\"";
   strcat(data, uid);
@@ -173,9 +161,22 @@ void verifyOwner (const char * enable, size_t length) {
   }
 }
 
+void setDeviseStatus (const char * status, size_t length) {
+  char * s_status = strdup(status);
+  Serial.print("devise status: ");
+  Serial.println(s_status);
+  enabled = atoi(strtok(s_status, ":"));
+  bright = atoi(strtok(NULL, ":"));
+  R = atoi(strtok(NULL, ":"));
+  G = atoi(strtok(NULL, ":"));
+  B = atoi(strtok(NULL, ":"));
+  saveSatatus();
+  lightControl();
+}
+
 void lightControl () {
-  int enabled = getEnabled();
-  int bright = getBright();
+  Serial.println(bright);
+  Serial.println(enabled);
   analogWrite(TXD, 255 - bright * enabled);
 }
 
@@ -184,6 +185,8 @@ void setup() {
   Serial.println();
   pinMode(TXD, OUTPUT);
   analogWriteRange(255);
+
+  getSatatus();
   lightControl();
 
   ultoa(ESP.getChipId(), chipId, 10);
@@ -226,11 +229,11 @@ void loop() {
   if (strcmp(status, "wait")==0 && WiFi.status() == WL_CONNECTED) {
     Serial.println("connected");
     Serial.println(WiFi.localIP());
-    webSocket.begin("195.2.93.153");
+    /* webSocket.begin("195.2.93.153"); */
+    webSocket.begin("192.168.100.114", 3000);
     webSocket.on("connect", startConnection);
     webSocket.on("VERIFY_OWNER", verifyOwner);
-    webSocket.on("DEVISE_ENABLE", toggleEnable);
-    webSocket.on("DEVISE_BRIGHT", updateBright);
+    webSocket.on("DEVISE_STATUS", setDeviseStatus);
     status="connect";
   }
   if ((strcmp(status, "wait")==0 && millis() - connectStart > 15000) || WiFi.status() == WL_CONNECT_FAILED ) {
