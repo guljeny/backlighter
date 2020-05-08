@@ -19,9 +19,9 @@ module.exports = class Devise {
       addTime: Date.now(),
       enabled: true,
       bright: 255,
-      R: 255,
-      G: 255,
-      B: 255,
+      r: 0,
+      g: 255,
+      b: 0,
       ...rest,
     }
     const { ops } = await db.collection('devises').insertOne(data)
@@ -31,7 +31,7 @@ module.exports = class Devise {
   static async listForOwner (owner) {
     const devises = await db.collection('devises')
       .find({ owner })
-      .map(val => getValues(val, ['name', 'uid', 'enabled', 'isOnline', 'version', 'bright', 'R', 'G', 'B', 'deviseType']))
+      .map(val => getValues(val, ['name', 'uid', 'enabled', 'isOnline', 'version', 'bright', 'r', 'g', 'b', 'deviseType']))
       .toArray()
     return devises
   }
@@ -62,10 +62,10 @@ module.exports = class Devise {
   }
 
   notify () {
-    const { uid, enabled, bright, R, G, B } = this.devise
+    const { uid, enabled, bright, r, g, b } = this.devise
     const socketId = devisesStore.findByUid(uid)
     if (!socketId) return
-    io.to(socketId.last).emit(DEVISE_STATUS, `${enabled ? 1 : 0}:${bright}:${R}:${G}:${B}`)
+    io.to(socketId.last).emit(DEVISE_STATUS, `${enabled ? 1 : 0}:${bright}:${r}:${g}:${b}`)
   }
 
   isVerefied () {

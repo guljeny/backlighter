@@ -4,7 +4,7 @@ const Devise = require('$app/models/Devise')
 const response = require('$utils/response')
 const notifyUsers = require('$utils/notifyUsers')
 
-const fieldsToNotify = ['enabled', 'bright', 'R', 'G', 'B']
+const fieldsToNotify = ['enabled', 'bright', 'r', 'g', 'b']
 
 module.exports = async function update (req, res) {
   const { userId } = req.session

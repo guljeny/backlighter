@@ -1,35 +1,18 @@
 const io = require('$app/socketIO')
 const Devise = require('$app/models/Devise')
-const User = require('$app/models/User')
-const notifyUsers = require('$utils/notifyUsers')
 const { devisesStore, usersStore } = require('./stores')
-const { common: { VERIFY_OWNER } } = require('./actions')
+const {
+  common: { VERIFY_OWNER },
+  devise: { DEVISE_CONNECTION },
+  user: { USER_CONNECTION, UPDATE_DEVISE },
+} = require('./actions')
+const { deviseConnection, verifyOwner, userConnection } = require('./listeners')
 
 module.exports = function bootstrapSockets () {
   io.on('connection', socket => {
-    socket.on('DEVISE_CONNECTION', async ({ uid, version, deviseType }) => {
-      devisesStore.addItem({ uid, id: socket.id })
-      let devise = await Devise.findBy({ uid })
-      if (!devise) devise = await Devise.add({ uid, version, deviseType })
-      devise.update({ version, isOnline: true })
-      devise.notify()
-      if (devise.get('newOwner')) socket.emit(VERIFY_OWNER)
-      const owner = devise.get('owner')
-      if (!owner) return
-      notifyUsers(owner).deviseUpdate(uid, { isOnline: true, version })
-    })
-    socket.on(VERIFY_OWNER, async () => {
-      const uid = devisesStore.findBySocketId(socket.id)
-      if (!uid) return
-      const devise = await Devise.findBy({ uid })
-      devise.setIsVerified()
-      // notify owner if online with new devise
-    })
-    socket.on('USER_CONNECTION', async id => {
-      const user = await User.findBy({ id })
-      if (!user) return
-      usersStore.addItem({ id, socketId: socket.id })
-    })
+    socket.on(DEVISE_CONNECTION, data => deviseConnection(data, socket))
+    socket.on(VERIFY_OWNER, () => verifyOwner(socket))
+    socket.on(USER_CONNECTION, id => userConnection(id, socket))
     socket.on('disconnect', async () => {
       const uid = devisesStore.findBySocketId(socket.id)
       if (uid) {
@@ -40,7 +23,7 @@ module.exports = function bootstrapSockets () {
           const users = usersStore.findByUserId(devise.get('owner'))
           if (users) {
             users.forEach(({ socketId }) => {
-              io.to(socketId).emit('DEVISES:UPDATE', { uid, isOnline: false })
+              io.to(socketId).emit(UPDATE_DEVISE, { uid, isOnline: false })
             })
           }
         }

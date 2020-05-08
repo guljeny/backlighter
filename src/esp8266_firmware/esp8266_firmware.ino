@@ -11,7 +11,11 @@
 SocketIoClient webSocket;
 ESP8266WebServer server(80);
 
-#define TXD 16
+#define TXDW 16 // white
+#define TXDR 14 // R
+#define TXDG 12 // G
+#define TXDB 13 // B
+
 char chipId[33];
 char coreId[33];
 
@@ -50,8 +54,9 @@ void handleFinishSetup () {
 void handleSetup() {
   String ssid = server.arg("ssid");
   String pass = server.arg("pass");
-  connectToWifi(ssid, pass);
+  Serial.println("setup");
   server.send(200, "text/plain", uid);
+  connectToWifi(ssid, pass);
 }
 
 void saveCredentioals(String ssid, String pass) {
@@ -130,6 +135,7 @@ void getSatatus () {
 
 void connectToWifi(String ssid, String pass) {
   status = "wait";
+  Serial.println("connectToWifi");
   connectStart = millis();
   WiFi.begin(ssid, pass);
 }
@@ -187,13 +193,22 @@ void setDeviseStatus (const char * status, size_t length) {
 void lightControl () {
   Serial.println(bright);
   Serial.println(enabled);
-  analogWrite(TXD, 255 - bright * enabled);
+  Serial.println(R);
+  Serial.println(G);
+  Serial.println(B);
+  analogWrite(TXDW, 255 - bright * enabled);
+  analogWrite(TXDR, R * enabled);
+  analogWrite(TXDG, G * enabled);
+  analogWrite(TXDB, B * enabled);
 }
 
 void setup() {
   Serial.begin(115200);
   Serial.println();
-  pinMode(TXD, OUTPUT);
+  pinMode(TXDW, OUTPUT);
+  pinMode(TXDR, OUTPUT);
+  pinMode(TXDG, OUTPUT);
+  pinMode(TXDB, OUTPUT);
   analogWriteRange(255);
 
   getSatatus();
