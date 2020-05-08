@@ -46,21 +46,42 @@ jobs:
       if: steps.build_info.outputs.is_changed > 0
       run: sudo apt-get install -yq python3
 
-    - name: compile
+    - name: create static .h
       if: steps.build_info.outputs.is_changed > 0
       run: |
-        npm run create-version.h
-        npm run create-connect-page.h
-        sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./src/esp8266_firmware/esp8266_firmware.ino -o ./src/esp8266_firmware/esp8266_latest.bin
+        npm run create:version
+        npm run create:connect-page
 
-    - name: Deploy firmvare to Server
+    - name: compile single
+      if: steps.build_info.outputs.is_changed > 0
+      run: |
+        npm run create:devise-type-single
+        sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./src/esp8266_firmware/esp8266_firmware.ino -o ./src/esp8266_firmware/single.bin
+
+    - name: compile rgb
+      if: steps.build_info.outputs.is_changed > 0
+      run: |
+        npm run create:devise-type-rgb
+        sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./src/esp8266_firmware/esp8266_firmware.ino -o ./src/esp8266_firmware/rgb.bin
+
+    - name: Deploy single firmvare to Server
       if: steps.build_info.outputs.is_changed > 0
       uses: easingthemes/ssh-deploy@v2.1.1
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         REMOTE_HOST: ${{ secrets.HOST}}
         REMOTE_USER: ${{ secrets.USER}}
-        SOURCE: "src/esp8266_firmware/esp8266_latest.bin"
+        SOURCE: "src/esp8266_firmware/single.bin"
+        TARGET: "/root/backlighter/dist/esp8266_firmware/"
+
+    - name: Deploy rgb firmvare to Server
+      if: steps.build_info.outputs.is_changed > 0
+      uses: easingthemes/ssh-deploy@v2.1.1
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        REMOTE_HOST: ${{ secrets.HOST}}
+        REMOTE_USER: ${{ secrets.USER}}
+        SOURCE: "src/esp8266_firmware/rgb.bin"
         TARGET: "/root/backlighter/dist/esp8266_firmware/"
 
   build:

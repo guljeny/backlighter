@@ -1,0 +1,3 @@
+#!/bin/sh
+
+echo "#define version \"$(cat src/esp8266_firmware/version.txt)\"" > src/esp8266_firmware/version.h

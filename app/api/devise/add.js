@@ -3,7 +3,7 @@ const response = require('$utils/response')
 const User = require('$app/models/User')
 const Devise = require('$app/models/Devise')
 const { devisesStore } = require('$app/sockets/stores')
-const { VERIFY_OWNER } = require('$app/sockets/actions')
+const { common: { VERIFY_OWNER } } = require('$app/sockets/actions')
 const socketIO = require('$app/socketIO')
 
 module.exports = async function add (req, res) {

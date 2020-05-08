@@ -1,11 +1,11 @@
 const add = require('./add')
 const list = require('./list')
-const power = require('./power')
-const bright = require('./bright')
+const update = require('./update')
+const updateFirmware = require('./updateFirmware')
 
 module.exports = {
   add,
   list,
-  power,
-  bright,
+  update,
+  updateFirmware,
 }

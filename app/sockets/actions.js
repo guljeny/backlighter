@@ -1,4 +1,11 @@
 module.exports = {
-  VERIFY_OWNER: 'VERIFY_OWNER',
-  DEVISE_STATUS: 'DEVISE_STATUS',
+  common: {
+    VERIFY_OWNER: 'VERIFY_OWNER',
+  },
+  devise: {
+    DEVISE_STATUS: 'DEVISE_STATUS',
+  },
+  user: {
+    UPDATE_DEVISE: 'DEVISES:UPDATE_ONE',
+  },
 }

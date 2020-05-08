@@ -6,6 +6,7 @@
 #include <string.h>
 #include "./version.h"
 #include "./connect_page.h"
+#include "./devise_type.h"
 
 SocketIoClient webSocket;
 ESP8266WebServer server(80);
@@ -150,6 +151,8 @@ void startConnection (const char * enable, size_t length) {
   strcat(data, uid);
   strcat(data, "\",\"version\":\"");
   strcat(data, version);
+  strcat(data, "\",\"deviseType\":\"");
+  strcat(data, DEVISE_TYPE);
   strcat(data, "\"}");
   webSocket.emit("DEVISE_CONNECTION", data);
 }
@@ -159,6 +162,13 @@ void verifyOwner (const char * enable, size_t length) {
     webSocket.emit("VERIFY_OWNER");
     setOwner(255);
   }
+}
+
+void updateFirmware (const char * enable, size_t length) {
+  char url[30] = "/esp8266/last/";
+  strcat(url, DEVISE_TYPE);
+  /* ESPhttpUpdate.update("192.168.100.114", 3000, url); */
+  ESPhttpUpdate.update("195.2.93.153", 80, url);
 }
 
 void setDeviseStatus (const char * status, size_t length) {
@@ -213,11 +223,9 @@ void setup() {
 
   delayStart = millis();
   delayRunning = true;
-  /* ESPhttpUpdate.update("195.2.93.153", 80, "/esp8266/last"); */
 }
 
 void loop() {
-  /* Serial.println(status); */
   server.handleClient();
   if (strcmp(status, "connect") == 0) {
     webSocket.loop();
@@ -229,11 +237,12 @@ void loop() {
   if (strcmp(status, "wait")==0 && WiFi.status() == WL_CONNECTED) {
     Serial.println("connected");
     Serial.println(WiFi.localIP());
-    /* webSocket.begin("195.2.93.153"); */
-    webSocket.begin("192.168.100.114", 3000);
+    webSocket.begin("195.2.93.153");
+    /* webSocket.begin("192.168.100.114", 3000); */
     webSocket.on("connect", startConnection);
     webSocket.on("VERIFY_OWNER", verifyOwner);
     webSocket.on("DEVISE_STATUS", setDeviseStatus);
+    webSocket.on("UPDATE_FIRMWARE", updateFirmware);
     status="connect";
   }
   if ((strcmp(status, "wait")==0 && millis() - connectStart > 15000) || WiFi.status() == WL_CONNECT_FAILED ) {

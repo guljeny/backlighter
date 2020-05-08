@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
-import { USER_CONNECTION } from './actions'
+import { updateDevise, DEVISES_UPDATE_ONE } from '$actions/devises'
 import store from '../store'
-import { updateDevise, DEVISES_UPDATE } from '$modules/DeviseList/actions'
+import { USER_CONNECTION } from './actions'
 
 const socket = io()
 
@@ -11,7 +11,7 @@ export function bootstrapSockets () {
     if (!user.authorized) return
     socket.emit(USER_CONNECTION, user.id)
   })
-  socket.on(DEVISES_UPDATE, payload => {
+  socket.on(DEVISES_UPDATE_ONE, payload => {
     store.dispatch(updateDevise(payload))
   })
 }

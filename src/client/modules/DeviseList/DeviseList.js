@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
-import { loadDevises } from './actions'
+import { loadDevises } from '$actions/devises'
 import ListItem from './components/ListItem'
 
 import './deviseList.scss'

@@ -2,17 +2,22 @@ import React from 'react'
 import classnames from 'classnames'
 import PowerButton from './PowerButton'
 import Bright from './Bright'
-import api from '../api'
+import api from '$api/devise'
 
 export default class ListItem extends React.Component {
   disable = () => {
     const { uid } = this.props
-    api.disable(uid)
+    api.update(uid, { enabled: false })
   }
 
   enable = () => {
     const { uid } = this.props
-    api.enable(uid)
+    api.update(uid, { enabled: true })
+  }
+
+  update = () => {
+    const { uid } = this.props
+    api.updateFirmware(uid)
   }
 
   render () {
@@ -39,6 +44,7 @@ export default class ListItem extends React.Component {
             {name}
           </div>
           <Bright bright={bright} uid={uid} />
+          <button onClick={this.update}>update</button>
         </div>
       </div>
     )

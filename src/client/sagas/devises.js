@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
-import { DEVISES_LOAD_REQUESTED, DEVISES_LOAD_FAILED, DEVISES_LOAD_SUCCEEDED } from './actions'
-import api from './api'
+import { DEVISES_LOAD_REQUESTED, DEVISES_LOAD_FAILED, DEVISES_LOAD_SUCCEEDED } from '$actions/devises'
+import api from '$api/devise'
 
 function* loadDevises () {
   try {

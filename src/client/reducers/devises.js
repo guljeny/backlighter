@@ -2,8 +2,8 @@ import {
   DEVISES_LOAD_REQUESTED,
   DEVISES_LOAD_FAILED,
   DEVISES_LOAD_SUCCEEDED,
-  DEVISES_UPDATE,
-} from './actions'
+  DEVISES_UPDATE_ONE,
+} from '$actions/devises'
 
 const initialState = {
   loading: true,
@@ -25,7 +25,7 @@ export default function user (state = initialState, action) {
         loading: false,
       }
     }
-    case DEVISES_UPDATE: {
+    case DEVISES_UPDATE_ONE: {
       const { uid, ...rest } = action.payload
       if (!uid) return state
       const list = [...state.list].map(item => {

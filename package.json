@@ -4,14 +4,16 @@
   "description": "backlighter",
   "main": "app/index.js",
   "scripts": {
-    "start-dev": "NODE_ENV=development npm run server && npm run mongod && npx webpack --watch",
-    "start": "NODE_ENV=production PORT=80 npm run server && npm run mongod",
+    "start-dev": "NODE_ENV=development npm run server && npx webpack --watch",
+    "start": "NODE_ENV=production PORT=80 npm run server",
     "server": "pm2 start ecosystem.config.js",
     "mongod": "mongod --config ./mongod.conf  --fork --logpath /dev/null",
     "build": "NODE_ENV=production npx webpack -p",
     "lint": "npx eslint ./src && npx eslint ./app",
-    "create-version.h": "echo \"#define version \\\"$(cat src/esp8266_firmware/version.txt)\\\"\" > src/esp8266_firmware/version.h",
-    "create-connect-page.h": "node bin/makeConnetionPage.js"
+    "create:version": "bin/create_version",
+    "create:connect-page": "node bin/makeConnetionPage.js",
+    "create:devise-type-rgb": "bin/create_devise_type rgb",
+    "create:devise-type-single": "bin/create_devise_type single"
   },
   "author": "Jenya Gul",
   "license": "ISC",

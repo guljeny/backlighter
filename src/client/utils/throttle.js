@@ -2,7 +2,6 @@ export default function throttle (func, time) {
   let inThrottle = false
   let timeouId = null
   return function (...args) {
-    // const args = arguments
     const context = this
     clearTimeout(timeouId)
     timeouId = setTimeout(() => {

@@ -1,7 +1,8 @@
 const db = require('$db')
 const io = require('$app/socketIO')
-const { DEVISE_STATUS } = require('$app/sockets/actions')
+const { devise: { DEVISE_STATUS } } = require('$app/sockets/actions')
 const { devisesStore } = require('$app/sockets/stores')
+const getValues = require('$app/utils/getValues')
 
 module.exports = class Devise {
   static async findBy (req) {
@@ -30,25 +31,7 @@ module.exports = class Devise {
   static async listForOwner (owner) {
     const devises = await db.collection('devises')
       .find({ owner })
-      .map(({
-        name,
-        uid,
-        enabled,
-        isOnline,
-        bright,
-        R,
-        G,
-        B,
-      }) => ({
-        name,
-        uid,
-        enabled,
-        isOnline,
-        bright,
-        R,
-        G,
-        B,
-      }))
+      .map(val => getValues(val, ['name', 'uid', 'enabled', 'isOnline', 'version', 'bright', 'R', 'G', 'B', 'deviseType']))
       .toArray()
     return devises
   }
@@ -69,6 +52,13 @@ module.exports = class Devise {
       { $set: values },
     )
     this.devise = { ...this.devise, ...values }
+  }
+
+  async updateFirmware () {
+    const { uid } = this.devise
+    const socketId = devisesStore.findByUid(uid)
+    if (!socketId) return
+    io.to(socketId.last).emit('UPDATE_FIRMWARE')
   }
 
   notify () {
