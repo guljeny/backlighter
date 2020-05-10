@@ -4,6 +4,8 @@ const { devise: { DEVISE_STATUS } } = require('$app/sockets/actions')
 const { devisesStore } = require('$app/sockets/stores')
 const getValues = require('$app/utils/getValues')
 
+const restValues = ['name', 'uid', 'enabled', 'version', 'bright', 'r', 'g', 'b', 'deviseType']
+
 module.exports = class Devise {
   static async findBy (req) {
     const devise = await db.collection('devises').findOne(req)
@@ -31,9 +33,13 @@ module.exports = class Devise {
   static async listForOwner (owner) {
     const devises = await db.collection('devises')
       .find({ owner })
-      .map(val => getValues(val, ['name', 'uid', 'enabled', 'isOnline', 'version', 'bright', 'r', 'g', 'b', 'deviseType']))
+      .map(val => getValues(val, restValues))
       .toArray()
-    return devises
+    return devises.map(({ uid, ...rest }) => ({
+      uid,
+      ...rest,
+      isOnline: !!devisesStore.findByUid(uid),
+    }))
   }
 
   constructor (devise) {
@@ -42,7 +48,8 @@ module.exports = class Devise {
   }
 
   get (key) {
-    return this.devise[key]
+    if (key) return this.devise[key]
+    return getValues(this.devise, restValues)
   }
 
   async update (values) {

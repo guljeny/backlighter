@@ -18,9 +18,9 @@ module.exports = async function updateFirmware (req, res) {
     response.unprocessableEntity(res)
     return
   }
-  const data = { version: getLastFirmwareVersion(), isOnline: false }
+  const data = { version: getLastFirmwareVersion() }
   await devise.update(data)
   devise.updateFirmware()
-  notifyUsers(userId).deviseUpdate(uid, data)
+  notifyUsers(userId).deviseUpdate(uid, { ...data, isOnline: false })
   response.success(res)
 }

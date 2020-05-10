@@ -3,6 +3,7 @@ import {
   DEVISES_LOAD_FAILED,
   DEVISES_LOAD_SUCCEEDED,
   DEVISES_UPDATE_ONE,
+  DEVISES_AVAILABLE_NEW,
 } from '$actions/devises'
 
 const initialState = {
@@ -23,6 +24,14 @@ export default function user (state = initialState, action) {
       return {
         ...state,
         loading: false,
+      }
+    }
+    case DEVISES_AVAILABLE_NEW: {
+      const { uid, ...rest } = action.payload
+      if (state.list.some(devise => devise.uid === uid)) return state
+      return {
+        ...state,
+        list: [...state.list, { uid, ...rest }],
       }
     }
     case DEVISES_UPDATE_ONE: {

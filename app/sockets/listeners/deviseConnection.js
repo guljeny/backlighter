@@ -7,10 +7,8 @@ module.exports = async ({ uid, version, deviseType }, socket) => {
   devisesStore.addItem({ uid, id: socket.id })
   let devise = await Devise.findBy({ uid })
   if (!devise) devise = await Devise.add({ uid, version, deviseType })
-  devise.update({ version, isOnline: true })
+  devise.update({ version })
   devise.notify()
   if (devise.get('newOwner')) socket.emit(VERIFY_OWNER)
-  const owner = devise.get('owner')
-  if (!owner) return
-  notifyUsers(owner).deviseUpdate(uid, { isOnline: true, version })
+  notifyUsers(devise.get('owner')).deviseUpdate(uid, { isOnline: true, version })
 }

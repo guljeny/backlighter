@@ -21,7 +21,7 @@ module.exports = async function add (req, res) {
   }
   let devise = await Devise.findBy({ uid })
   if (!devise) devise = await Devise.add({ uid })
-  devise.update({ newOwner: userId, newName: deviseName })
+  await devise.update({ newOwner: userId, newName: deviseName })
   const socketId = devisesStore.findByUid(uid)
   if (socketId) {
     socketIO.to(socketId.last).emit(VERIFY_OWNER)

@@ -19,12 +19,13 @@ module.exports = function bootstrapSockets () {
         const deviseSockets = devisesStore.findByUid(uid)
         if (deviseSockets && deviseSockets.all.length === 1) {
           const devise = await Devise.findBy({ uid })
-          devise.update({ isOnline: false })
-          const users = usersStore.findByUserId(devise.get('owner'))
-          if (users) {
-            users.forEach(({ socketId }) => {
-              io.to(socketId).emit(UPDATE_DEVISE, { uid, isOnline: false })
-            })
+          if (devise) {
+            const users = usersStore.findByUserId(devise.get('owner'))
+            if (users) {
+              users.forEach(({ socketId }) => {
+                io.to(socketId).emit(UPDATE_DEVISE, { uid, isOnline: false })
+              })
+            }
           }
         }
         devisesStore.delete(socket.id)
