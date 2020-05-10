@@ -7,5 +7,3 @@ export const loadDevises = makeAction(DEVISES_LOAD_REQUESTED)
 
 export const DEVISES_UPDATE_ONE = 'DEVISES:UPDATE_ONE'
 export const updateDevise = makeAction(DEVISES_UPDATE_ONE)
-export const DEVISES_AVAILABLE_NEW = 'DEVISES:AVAILABLE_DEVISE'
-export const availableDevise = makeAction(DEVISES_AVAILABLE_NEW)

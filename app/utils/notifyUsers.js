@@ -1,6 +1,6 @@
 const { usersStore } = require('$app/sockets/stores')
 const socketIO = require('$app/socketIO')
-const { user: { UPDATE_DEVISE, AVAILABLE_DEVISE } } = require('$app/sockets/actions')
+const { user: { UPDATE_DEVISE } } = require('$app/sockets/actions')
 
 module.exports = function (userId) {
   const users = usersStore.findByUserId(userId)
@@ -9,12 +9,6 @@ module.exports = function (userId) {
       if (!users) return
       users.forEach(({ socketId }) => {
         socketIO.to(socketId).emit(UPDATE_DEVISE, { uid, ...values })
-      })
-    },
-    availableDevise: (uid, values) => {
-      if (!users) return
-      users.forEach(({ socketId }) => {
-        socketIO.to(socketId).emit(AVAILABLE_DEVISE, { uid, ...values })
       })
     },
   }

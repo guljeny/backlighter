@@ -13,6 +13,7 @@ class DeviseList extends React.Component {
 
   render () {
     const { authorized, list } = this.props
+    console.log(list)
     if (!authorized) return <Redirect to="/" />
     return (
       <div className="container devise-list">

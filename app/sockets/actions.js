@@ -9,7 +9,6 @@ module.exports = {
   },
   user: {
     UPDATE_DEVISE: 'DEVISES:UPDATE_ONE',
-    AVAILABLE_DEVISE: 'DEVISES:AVAILABLE_DEVISE',
     USER_CONNECTION: 'USER_CONNECTION',
   },
 }

@@ -7,13 +7,7 @@ import api from '$api/devise'
 import throttle from '$utils/throttle'
 
 export default class ListItem extends React.Component {
-  state = {
-    r: this.props.r,
-    g: this.props.g,
-    b: this.props.b,
-  }
-
-  updateColor = throttle(({ r, g, b }) => {
+  updateColor = throttle(({ rgb: { r, g, b } }) => {
     const { uid } = this.props
     api.update(uid, { r, g, b })
   }, 100)
@@ -33,14 +27,8 @@ export default class ListItem extends React.Component {
     api.updateFirmware(uid)
   }
 
-  handleColorChange = ({ rgb }) => {
-    this.setState({ ...rgb })
-    this.updateColor(rgb)
-  }
-
   render () {
-    const { name, enabled, isOnline, bright, uid } = this.props
-    const { r, g, b } = this.state
+    const { name, enabled, isOnline, bright, uid, r, g, b } = this.props
     return (
       <div className={
         classnames(
@@ -63,7 +51,7 @@ export default class ListItem extends React.Component {
             {name}
             <Bright bright={bright} uid={uid} />
             <button onClick={this.update}>update</button>
-            <HuePicker color={{ r, g, b }} onChange={this.handleColorChange} />
+            <HuePicker color={{ r, g, b }} onChange={this.updateColor} />
           </div>
         </div>
       </div>

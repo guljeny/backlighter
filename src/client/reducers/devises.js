@@ -3,7 +3,6 @@ import {
   DEVISES_LOAD_FAILED,
   DEVISES_LOAD_SUCCEEDED,
   DEVISES_UPDATE_ONE,
-  DEVISES_AVAILABLE_NEW,
 } from '$actions/devises'
 
 const initialState = {
@@ -26,28 +25,22 @@ export default function user (state = initialState, action) {
         loading: false,
       }
     }
-    case DEVISES_AVAILABLE_NEW: {
-      const { uid, ...rest } = action.payload
-      if (state.list.some(devise => devise.uid === uid)) return state
-      return {
-        ...state,
-        list: [...state.list, { uid, ...rest }],
-      }
-    }
     case DEVISES_UPDATE_ONE: {
       const { uid, ...rest } = action.payload
       if (!uid) return state
-      const list = [...state.list].map(item => {
-        if (item.uid !== uid) return item
-        return {
-          ...item,
-          ...rest,
-        }
-      })
-      return {
-        ...state,
-        list,
+      let list = [...state.list]
+      if (list.some(item => item.uid === uid)) {
+        list = list.map(item => {
+          if (item.uid !== uid) return item
+          return {
+            ...item,
+            ...rest,
+          }
+        })
+      } else {
+        list.push({ uid, ...rest })
       }
+      return { ...state, list }
     }
     case DEVISES_LOAD_SUCCEEDED: {
       const { list, lastFirmwareVersion } = action.payload

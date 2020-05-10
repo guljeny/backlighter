@@ -7,5 +7,5 @@ module.exports = async socket => {
   if (!uid) return
   const devise = await Devise.findBy({ uid })
   await devise.setIsVerified()
-  notifyUsers(devise.get('owner')).availableDevise(uid, devise.get())
+  notifyUsers(devise.get('owner')).deviseUpdate(uid, devise.get())
 }
