@@ -10,14 +10,15 @@ import showPopup from '$utils/showPopup'
 import { isAddDevisePage } from '$utils/page'
 import I18n from '$utils/I18n'
 import logout from '$utils/logout'
+import logo from './images/logo.svg'
 
 import './header.scss'
 
-function Header ({ authorized }) {
+function Header ({ authorized, email }) {
   return (
     <header className="header">
       <div className="container">
-        <Link className="header-title" to="/">Backlighter</Link>
+        <Link className="header__logo" to="/"><img src={logo} alt="logo" /></Link>
         {authorized && (
           <nav>
             <NavLink exact to="/">Shop</NavLink>
@@ -25,26 +26,35 @@ function Header ({ authorized }) {
           </nav>
         )}
         {!isAddDevisePage() && (
-          <div className="header-buttons">
+          <>
             {authorized ? (
-              <Button modifiers="btn--outline" onClick={logout}><I18n t="buttons.logout" /></Button>
+              <div className="header__user">
+                <div className="header__user-email">
+                  {email}
+                </div>
+                <ul>
+                  <li onClick={logout}>
+                    <I18n t="buttons.logout" />
+                  </li>
+                </ul>
+              </div>
             ) : (
-              <>
+              <div className="header__buttons">
                 <Button
-                  modifiers="btn--primary"
+                  modifiers="btn--as-link"
                   onClick={() => showPopup('registration', RegistrationPopup)}
                 >
                   <I18n t="buttons.register" />
                 </Button>
                 <Button
-                  modifiers="btn--outline"
-                  onClick={() => showPopup('register', LoginPopup)}
+                  modifiers="header__login-button"
+                  onClick={() => showPopup('login', LoginPopup)}
                 >
                   <I18n t="buttons.login" />
                 </Button>
-              </>
+              </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </header>
@@ -53,6 +63,7 @@ function Header ({ authorized }) {
 
 const mapStateToProps = ({ user }) => ({
   authorized: user.authorized,
+  email: user.email,
 })
 
 export default compose(

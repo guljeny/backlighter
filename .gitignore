@@ -6,4 +6,4 @@ src/esp8266_firmware/*.elf
 src/esp8266_firmware/version.h
 src/esp8266_firmware/connect_page.h
 src/esp8266_firmware/devise_type.h
-*/.DS_Store
+.DS_Store

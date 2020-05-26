@@ -17,10 +17,11 @@ module.exports = {
       '$api': path.resolve(__dirname, './client/api/'),
       '$utils': path.resolve(__dirname, './client/utils/'),
       '$socket': path.resolve(__dirname, './client/socket/'),
-      '$common': path.resolve(__dirname, './common/'),
       '$components': path.resolve(__dirname, './client/components/'),
       '$modules': path.resolve(__dirname, './client/modules/'),
       '$store': path.resolve(__dirname, './client/store.js'),
+      '$styles': path.resolve(__dirname, './client/styles'),
+      '$common': path.resolve(__dirname, './common/'),
     },
   },
   plugins: [
@@ -33,6 +34,10 @@ module.exports = {
   ],
   module: {
     rules: [
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: 'file-loader',
+      },
       {
         test: /\.ya?ml$/,
         type: 'json',

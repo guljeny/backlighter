@@ -1,0 +1,65 @@
+@-webkit-keyframes autofill {
+  to {
+    color: inherit;
+    background: transparent;
+  }
+}
+
+input {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  color: $light-blue;
+  font-size: 14px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 4px;
+  outline: none;
+  transition: .2s;
+  &::-webkit-autofill {
+    -webkit-animation-name: autofill;
+    -webkit-animation-fill-mode: both;
+  }
+  &::placeholder {
+    font-weight: 100;
+    color: #767d8a;
+  }
+  &:focus {
+    border-color: rgba(255, 255, 255, .5);
+  }
+}
+
+.form {
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+  &__field {
+    margin-bottom: 15px;
+  }
+  &__field-error {
+    input {
+      background: #423030;
+      border-color: #983f3f;
+    }
+  }
+  &__errors {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #c54e50;
+    span {
+      display: block;
+    }
+  }
+  &__bottom-text {
+    padding-top: 15px;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 12px;
+    color: $light-blue;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    button {
+      margin-left: 10px;
+    }
+  }
+}
