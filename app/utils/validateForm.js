@@ -1,3 +1,3 @@
-import validateForm from '../../src/utils/validateForm'
+import validateForm from '../../common/utils/validateForm'
 
 module.exports = validateForm

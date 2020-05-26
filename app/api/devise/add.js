@@ -1,10 +1,9 @@
+const User = require('$models/User')
+const Devise = require('$models/Devise')
 const validateForm = require('$utils/validateForm')
 const response = require('$utils/response')
-const User = require('$app/models/User')
-const Devise = require('$app/models/Devise')
-const { devisesStore } = require('$app/sockets/stores')
-const { common: { VERIFY_OWNER } } = require('$app/sockets/actions')
-const socketIO = require('$app/socketIO')
+const notify = require('$utils/notify')
+const { deviseActions } = require('$sockets/actions')
 
 module.exports = async function add (req, res) {
   const { userId } = req.session
@@ -22,9 +21,6 @@ module.exports = async function add (req, res) {
   let devise = await Devise.findBy({ uid })
   if (!devise) devise = await Devise.add({ uid })
   await devise.update({ newOwner: userId, newName: deviseName })
-  const socketId = devisesStore.findByUid(uid)
-  if (socketId) {
-    socketIO.to(socketId.last).emit(VERIFY_OWNER)
-  }
+  notify.devise(uid, deviseActions.verifyOwner)
   response.success(res)
 }

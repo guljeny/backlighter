@@ -1,10 +1,10 @@
-const db = require('$db')
-const io = require('$app/socketIO')
-const { devise: { DEVISE_STATUS } } = require('$app/sockets/actions')
-const { devisesStore } = require('$app/sockets/stores')
-const getValues = require('$app/utils/getValues')
+const db = require('$utils/db')
+const notify = require('$utils/notify')
+const getValues = require('$utils/getValues')
+const { deviseStore } = require('$sockets/stores')
+const { devise: deviseActions } = require('$sockets/actions')
 
-const restValues = ['name', 'uid', 'enabled', 'version', 'bright', 'r', 'g', 'b', 'deviseType']
+const restValues = ['name', 'uid', 'enabled', 'version', 'bright', 'r', 'g', 'b', 'deviseType', 'isOnline']
 
 module.exports = class Devise {
   static async findBy (req) {
@@ -31,15 +31,10 @@ module.exports = class Devise {
   }
 
   static async listForOwner (owner) {
-    const devises = await db.collection('devises')
+    return db.collection('devises')
       .find({ owner })
-      .map(val => getValues(val, restValues))
+      .map(val => getValues({ ...val, isOnline: !!deviseStore.findByUid(val.uid) }, restValues))
       .toArray()
-    return devises.map(({ uid, ...rest }) => ({
-      uid,
-      ...rest,
-      isOnline: !!devisesStore.findByUid(uid),
-    }))
   }
 
   constructor (devise) {
@@ -54,25 +49,18 @@ module.exports = class Devise {
 
   async update (values) {
     const { uid } = this.devise
-    await db.collection('devises').updateOne(
-      { uid },
-      { $set: values },
-    )
+    await db.collection('devises').updateOne({ uid }, { $set: values })
     this.devise = { ...this.devise, ...values }
   }
 
   async updateFirmware () {
     const { uid } = this.devise
-    const socketId = devisesStore.findByUid(uid)
-    if (!socketId) return
-    io.to(socketId.last).emit('UPDATE_FIRMWARE')
+    notify.devise(uid, deviseActions.updateFirmware)
   }
 
   notify () {
     const { uid, enabled, bright, r, g, b } = this.devise
-    const socketId = devisesStore.findByUid(uid)
-    if (!socketId) return
-    io.to(socketId.last).emit(DEVISE_STATUS, `${enabled ? 1 : 0}:${bright}:${r}:${g}:${b}`)
+    notify.devise(uid, deviseActions.setState, `${enabled ? 1 : 0}:${bright}:${r}:${g}:${b}`)
   }
 
   isVerefied () {

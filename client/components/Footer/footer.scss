@@ -1,0 +1,12 @@
+@import 'client/styles/colors';
+
+footer {
+  padding: 20px 0;
+  color: #fff;
+  font-size: 12px;
+  background: $dark-gray;
+  .container {
+    display: flex;
+    justify-content: center;
+  }
+}

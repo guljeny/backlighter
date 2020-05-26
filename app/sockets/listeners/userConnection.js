@@ -1,15 +1,16 @@
 const { ObjectID } = require('mongodb')
 const User = require('$app/models/User')
 const Devise = require('$app/models/Devise')
-const { devisesStore, usersStore } = require('../stores')
-const { user: { UPDATE_DEVISE } } = require('../actions')
+const { deviseStore, usersStore } = require('../stores')
+const notify = require('$utils/notify')
+const { deviseList } = require('../actions')
 
 module.exports = async (id, socket) => {
   const user = await User.findBy({ id })
   if (!user) return
   usersStore.addItem({ id, socketId: socket.id })
+  // notify user if reconnect and have loaded list
   const list = await Devise.listForOwner(ObjectID(id))
-  list.forEach(({ uid }) => {
-    socket.emit(UPDATE_DEVISE, { uid, isOnline: !!devisesStore.findByUid(uid) })
-  })
+  const sendData = list.map(({ uid }) => ({ uid, isOnline: !!deviseStore.findByUid(uid) }))
+  notify.user(id, deviseList.updateAll, sendData)
 }

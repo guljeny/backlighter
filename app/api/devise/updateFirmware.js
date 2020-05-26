@@ -1,8 +1,9 @@
 const { ObjectId } = require('mongodb')
-const User = require('$app/models/User')
-const Devise = require('$app/models/Devise')
+const User = require('$models/User')
+const Devise = require('$models/Devise')
 const response = require('$utils/response')
-const notifyUsers = require('$utils/notifyUsers')
+const notify = require('$utils/notify')
+const { deviseList } = require('$sockets/actions')
 const getLastFirmwareVersion = require('$utils/getLastFirmwareVersion')
 
 module.exports = async function updateFirmware (req, res) {
@@ -21,6 +22,6 @@ module.exports = async function updateFirmware (req, res) {
   const data = { version: getLastFirmwareVersion() }
   await devise.update(data)
   devise.updateFirmware()
-  notifyUsers(userId).deviseUpdate(uid, { ...data, isOnline: false })
+  notify.user(userId, deviseList.updateOne, { uid, ...data, isOnline: false })
   response.success(res)
 }

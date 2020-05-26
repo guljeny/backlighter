@@ -1,7 +1,7 @@
-const devisesStore = require('./devisesStore')
+const deviseStore = require('./deviseStore')
 const usersStore = require('./usersStore')
 
 module.exports = {
-  devisesStore,
+  deviseStore,
   usersStore,
 }

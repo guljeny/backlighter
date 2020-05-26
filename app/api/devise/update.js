@@ -1,8 +1,9 @@
 const { ObjectId } = require('mongodb')
-const User = require('$app/models/User')
-const Devise = require('$app/models/Devise')
+const User = require('$models/User')
+const Devise = require('$models/Devise')
 const response = require('$utils/response')
-const notifyUsers = require('$utils/notifyUsers')
+const notify = require('$utils/notify')
+const { deviseList } = require('$sockets/actions')
 
 const fieldsToNotify = ['enabled', 'bright', 'r', 'g', 'b']
 
@@ -20,9 +21,9 @@ module.exports = async function update (req, res) {
     return
   }
   await devise.update(rest)
-  if (Object.keys(rest).find(key => fieldsToNotify.includes(key))) {
+  if (Object.keys(rest).some(key => fieldsToNotify.includes(key))) {
     devise.notify()
   }
-  notifyUsers(userId).deviseUpdate(uid, rest)
+  notify.user(userId, deviseList.updateOne, { uid, ...rest })
   response.success(res)
 }

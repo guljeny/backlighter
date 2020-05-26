@@ -1,10 +1,10 @@
 const app = require('$app/app')
-const { register, login, user, logout } = require('./user')
+const { register, login, get, logout } = require('./user')
 const { add, list, update, updateFirmware } = require('./devise')
 const translations = require('./translations')
 
 module.exports = function bootstrapApi () {
-  app.get('/api/user', user)
+  app.get('/api/user/get', get)
   app.post('/api/user/register', register)
   app.post('/api/user/login', login)
   app.get('/api/user/logout', logout)

@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cat src/esp8266_firmware/devise_type_$(echo $1).txt > src/esp8266_firmware/devise_type.h
+cat esp8266_firmware/devise_type_$(echo $1).txt > esp8266_firmware/devise_type.h

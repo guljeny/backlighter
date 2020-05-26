@@ -1,5 +1,5 @@
+const User = require('$models/User')
 const response = require('$utils/response')
-const User = require('$app/models/User')
 
 module.exports = async function login (req, res) {
   const { email, password } = req.body

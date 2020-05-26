@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: './src/client/index.js',
+  entry: './client/index.js',
   output: {
     path: path.resolve(__dirname, './dist/client/'),
     filename: `bundle${process.env.NODE_ENV === 'production' ? '.[hash]' : ''}.js`,
@@ -13,19 +13,19 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      '$actions': path.resolve(__dirname, 'src/client/actions/'),
-      '$api': path.resolve(__dirname, 'src/client/api/'),
-      '$utils': path.resolve(__dirname, 'src/client/utils/'),
-      '$socket': path.resolve(__dirname, 'src/client/socket/'),
-      '$common_utils': path.resolve(__dirname, 'src/utils/'),
-      '$components': path.resolve(__dirname, 'src/client/components/'),
-      '$modules': path.resolve(__dirname, 'src/client/modules/'),
-      '$store': path.resolve(__dirname, 'src/client/store.js'),
+      '$actions': path.resolve(__dirname, './client/actions/'),
+      '$api': path.resolve(__dirname, './client/api/'),
+      '$utils': path.resolve(__dirname, './client/utils/'),
+      '$socket': path.resolve(__dirname, './client/socket/'),
+      '$common': path.resolve(__dirname, './common/'),
+      '$components': path.resolve(__dirname, './client/components/'),
+      '$modules': path.resolve(__dirname, './client/modules/'),
+      '$store': path.resolve(__dirname, './client/store.js'),
     },
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/client/index.html',
+      template: './client/index.html',
     }),
     new MiniCssExtractPlugin({
       filename: 'styles.css',
@@ -33,6 +33,11 @@ module.exports = {
   ],
   module: {
     rules: [
+      {
+        test: /\.ya?ml$/,
+        type: 'json',
+        use: 'yaml-loader',
+      },
       {
         test: /\.jsx?$/,
         exclude: /(node_modules)/,

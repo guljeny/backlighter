@@ -1,6 +1,6 @@
+const User = require('$models/User')
 const validateForm = require('$utils/validateForm')
 const response = require('$utils/response')
-const User = require('$app/models/User')
 
 module.exports = async function register (req, res) {
   const { email, password, repeatPassword } = req.body

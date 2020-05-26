@@ -1,9 +1,9 @@
-const requireLocale = require('require-yml')
+const requireYml = require('require-yml')
 const response = require('$utils/response')
 
 module.exports = async function translations (req, res) {
   const { locale } = req.params
-  const locales = requireLocale(`./locales/${locale}`)
+  const locales = requireYml(`./locales/${locale}`)
   if (!locales) {
     response.notFound(res)
     return

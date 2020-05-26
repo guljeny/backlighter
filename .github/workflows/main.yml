@@ -56,13 +56,13 @@ jobs:
       # if: steps.build_info.outputs.is_changed > 0
       run: |
         npm run create:devise-type-single
-        sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./src/esp8266_firmware/esp8266_firmware.ino -o ./src/esp8266_firmware/single.bin
+        sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./esp8266_firmware/esp8266_firmware.ino -o ./esp8266_firmware/single.bin
 
     - name: compile rgb
       # if: steps.build_info.outputs.is_changed > 0
       run: |
         npm run create:devise-type-rgb
-        sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./src/esp8266_firmware/esp8266_firmware.ino -o ./src/esp8266_firmware/rgb.bin
+        sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./esp8266_firmware/esp8266_firmware.ino -o ./esp8266_firmware/rgb.bin
 
     - name: Deploy single firmvare to Server
       # if: steps.build_info.outputs.is_changed > 0
@@ -71,7 +71,7 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         REMOTE_HOST: ${{ secrets.HOST}}
         REMOTE_USER: ${{ secrets.USER}}
-        SOURCE: "src/esp8266_firmware/single.bin"
+        SOURCE: "esp8266_firmware/single.bin"
         TARGET: "/root/backlighter/dist/esp8266_firmware/"
 
     - name: Deploy rgb firmvare to Server
@@ -81,7 +81,7 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         REMOTE_HOST: ${{ secrets.HOST}}
         REMOTE_USER: ${{ secrets.USER}}
-        SOURCE: "src/esp8266_firmware/rgb.bin"
+        SOURCE: "esp8266_firmware/rgb.bin"
         TARGET: "/root/backlighter/dist/esp8266_firmware/"
 
   build:

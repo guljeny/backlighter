@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 const { mongoConnectionUrl } = require('$config')
-const db = require('$db')
+const db = require('$utils/db')
 
 const store = new MongoDBStore({
   uri: mongoConnectionUrl,
@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 async function initApplication (callback) {
   const err = await db.connect()
   if (err) throw new Error(err)
-  callback(app)
+  callback()
 }
 
 module.exports = initApplication

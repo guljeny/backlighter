@@ -1,34 +1,28 @@
 const io = require('$app/socketIO')
-const Devise = require('$app/models/Devise')
-const { devisesStore, usersStore } = require('./stores')
-const {
-  common: { VERIFY_OWNER },
-  devise: { DEVISE_CONNECTION },
-  user: { USER_CONNECTION, UPDATE_DEVISE },
-} = require('./actions')
+const Devise = require('$models/Devise')
+const notify = require('$utils/notify')
+const { deviseStore, usersStore } = require('./stores')
+const { devise, user, deviseList } = require('./actions')
 const { deviseConnection, verifyOwner, userConnection } = require('./listeners')
 
 module.exports = function bootstrapSockets () {
   io.on('connection', socket => {
-    socket.on(DEVISE_CONNECTION, data => deviseConnection(data, socket))
-    socket.on(VERIFY_OWNER, () => verifyOwner(socket))
-    socket.on(USER_CONNECTION, id => userConnection(id, socket))
+    socket.on(devise.connect, data => deviseConnection(data, socket))
+    socket.on(devise.verifyMe, () => verifyOwner(socket))
+    socket.on(user.connect, id => userConnection(id, socket))
     socket.on('disconnect', async () => {
-      const uid = devisesStore.findBySocketId(socket.id)
+      const uid = deviseStore.findBySocketId(socket.id)
       if (uid) {
-        const deviseSockets = devisesStore.findByUid(uid)
+        const deviseSockets = deviseStore.findByUid(uid)
+        // when devise reconnect, old socket delete after some time
+        // and disconnect trigger when socket stay one
         if (deviseSockets && deviseSockets.all.length === 1) {
           const devise = await Devise.findBy({ uid })
           if (devise) {
-            const users = usersStore.findByUserId(devise.get('owner'))
-            if (users) {
-              users.forEach(({ socketId }) => {
-                io.to(socketId).emit(UPDATE_DEVISE, { uid, isOnline: false })
-              })
-            }
+            notify.user(devise.get('owner'), deviseList.updateOne, { uid, isOnline: false })
           }
         }
-        devisesStore.delete(socket.id)
+        deviseStore.delete(socket.id)
       }
       const users = usersStore.findBySocketId(socket.id)
       if (users) {

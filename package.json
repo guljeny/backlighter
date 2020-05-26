@@ -9,7 +9,7 @@
     "server": "pm2 start ecosystem.config.js",
     "mongod": "mongod --config ./mongod.conf  --fork --logpath /dev/null",
     "build": "NODE_ENV=production npx webpack -p",
-    "lint": "npx eslint ./src && npx eslint ./app",
+    "lint": "npx eslint ./client && npx eslint ./app",
     "create:version": "bin/create_version",
     "create:connect-page": "node bin/makeConnetionPage.js",
     "create:devise-type-rgb": "bin/create_devise_type rgb",
@@ -18,11 +18,12 @@
   "author": "Jenya Gul",
   "license": "ISC",
   "_moduleAliases": {
-    "~root": ".",
-    "$config": "./src/config.js",
+    "~": ".",
+    "$config": "./app/config.js",
     "$utils": "./app/utils",
-    "$common_utils": "./src/utils",
-    "$db": "./src/db.js",
+    "$api": "./app/api",
+    "$models": "./app/models",
+    "$sockets": "./app/sockets",
     "$app": "./app"
   },
   "dependencies": {
@@ -71,6 +72,7 @@
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "yaml-loader": "^0.6.0"
   }
 }

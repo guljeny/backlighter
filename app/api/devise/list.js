@@ -1,7 +1,7 @@
+const User = require('$models/User')
+const Devise = require('$models/Devise')
 const response = require('$utils/response')
 const getLastFirmwareVersion = require('$utils/getLastFirmwareVersion')
-const User = require('$app/models/User')
-const Devise = require('$app/models/Devise')
 
 module.exports = async function user (req, res) {
   const { userId } = req.session
@@ -12,5 +12,5 @@ module.exports = async function user (req, res) {
   }
   const devises = await Devise.listForOwner(userId)
   const lastFirmwareVersion = await getLastFirmwareVersion()
-  response.success(res, { list: devises, lastFirmwareVersion })
+  response.success(res, { items: devises, lastFirmwareVersion })
 }

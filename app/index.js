@@ -10,9 +10,5 @@ initApplication(() => {
   bootstrapApi()
   bootstrapStaticServer()
   bootstrapSockets()
-  logger('starting app', '...')
-
-  // const server = app.listen(process.env.PORT || 80)
-
-  // const io = socketIO.listen(server)
+  logger('starting app ...')
 })

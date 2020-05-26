@@ -1,14 +1,4 @@
-module.exports = {
-  common: {
-    VERIFY_OWNER: 'VERIFY_OWNER',
-  },
-  devise: {
-    DEVISE_STATUS: 'DEVISE_STATUS',
-    DEVISE_UPDATE: 'DEVISE_UPDATE',
-    DEVISE_CONNECTION: 'DEVISE_CONNECTION',
-  },
-  user: {
-    UPDATE_DEVISE: 'DEVISES:UPDATE_ONE',
-    USER_CONNECTION: 'USER_CONNECTION',
-  },
-}
+const req = require('require-yml')
+
+const actions = req('./common/actions.yml')
+module.exports = actions
