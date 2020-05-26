@@ -75,8 +75,9 @@
     align-items: center;
     height: 60px;
     ul {
-      width: 200px;
+      z-index: 10;
       position: absolute;
+      width: 200px;
       top: 100%;
       right: 0;
       margin: 0;
@@ -86,6 +87,7 @@
       opacity: 0;
       transform: translateY(20px);
       transition: .3s;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
     }
     li {
       padding: 8px 0;

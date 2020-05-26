@@ -6,7 +6,7 @@ import I18n from '$utils/I18n'
 import validateForm from '$utils/validateForm'
 import checkIsFormValid from '$utils/checkIsFormValid'
 import { Field, Button } from '$components/form'
-import { updateUser, USER_CONNECTION } from '$actions/user'
+import { updateUser, CONNECT_USER } from '$actions/user'
 import socket from '$socket'
 
 function RegistrationForm ({ onSuccess, updateUser, showLogin }) {
@@ -17,7 +17,7 @@ function RegistrationForm ({ onSuccess, updateUser, showLogin }) {
       const { success, payload } = await api.register(values)
       if (success) {
         updateUser(payload)
-        socket.emit(USER_CONNECTION, payload.id)
+        socket.emit(CONNECT_USER, payload.id)
         onSuccess && onSuccess()
         return
       }
