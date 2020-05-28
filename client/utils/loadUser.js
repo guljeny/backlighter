@@ -7,7 +7,6 @@ export default async function () {
   const { success, payload } = await user.get()
   if (success && payload) {
     store.dispatch(updateUser(payload))
-    console.log(CONNECT_USER)
     socket.emit(CONNECT_USER, payload.id)
   }
 }

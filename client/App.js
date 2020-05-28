@@ -38,7 +38,6 @@ export default class App extends React.Component {
       <Provider store={store}>
         <Router>
           <Header />
-          <Popup />
           <div className="content">
             <Switch>
               <Route exact path="/devise/add/:uid" component={AddDevise} />
@@ -47,6 +46,7 @@ export default class App extends React.Component {
             </Switch>
           </div>
           <Footer />
+          <Popup />
         </Router>
       </Provider>
     )

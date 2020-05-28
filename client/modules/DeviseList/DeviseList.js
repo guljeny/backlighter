@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
 import { loadDeviseList } from '$actions/deviseList'
-import ListItem from './components/ListItem'
+import Devise from './components/Devise'
 
 import './deviseList.scss'
 
@@ -16,9 +16,7 @@ class DeviseList extends React.Component {
     if (!authorized) return <Redirect to="/" />
     return (
       <div className="container devise-list">
-        <div className="devise-list__wrapper">
-          {items.map(item => <ListItem key={item.uid} {...item} />)}
-        </div>
+        {items.map(item => <Devise key={item.uid} {...item} />)}
       </div>
     )
   }

@@ -9,8 +9,8 @@ body {
   padding: 0;
   background-color: $background;
   background-image: url('images/lines.svg');
-  background-repeat: no-repeat;
-  background-size: contain;
+  background-repeat: repeat-x;
+  background-position-x: center;
   font-size: 14px;
   color: $light;
   &:after {
@@ -22,21 +22,39 @@ body {
     height: 100%;
     pointer-events: none;
     background-image: url('images/lines.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
+    background-repeat: repeat-x;
+    background-position-x: center;
+    background-position-y: -80px;
     transform: rotate(180deg);
   }
 }
 
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+.page {
+  display: grid;
+  grid-template-columns:1fr;
+  grid-template-rows: 60px 1fr 54px;
+  grid-template-areas:
+    "header"
+    "content"
+    "footer";
+}
+
+header {
+  grid-area: header;
 }
 
 .content {
-  min-height: calc(100vh - 104px);
+  min-height: calc(100vh - 114px);
   display: flex;
-  padding: 20px 0;
+  grid-area: content;
+}
+
+footer {
+  grid-area: footer;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
 }

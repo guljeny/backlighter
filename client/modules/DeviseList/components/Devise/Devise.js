@@ -1,12 +1,14 @@
 import React from 'react'
 import classnames from 'classnames'
 import { HuePicker } from 'react-color'
-import PowerButton from './PowerButton'
-import Bright from './Bright'
+import PowerButton from '../PowerButton'
+import Bright from '../Bright'
 import api from '$api/devise'
 import throttle from '$utils/throttle'
 
-export default class ListItem extends React.Component {
+import './devise.scss'
+
+export default class Devise extends React.Component {
   updateColor = throttle(({ rgb: { r, g, b } }) => {
     const { uid } = this.props
     api.update(uid, { r, g, b })
@@ -49,9 +51,9 @@ export default class ListItem extends React.Component {
           />
           <div className="devise-list__item-content">
             {name}
-            <Bright bright={bright} uid={uid} />
+            {/* <Bright bright={bright} uid={uid} /> */}
             <button onClick={this.update}>update</button>
-            <HuePicker color={{ r, g, b }} onChange={this.updateColor} />
+            {/* <HuePicker color={{ r, g, b }} onChange={this.updateColor} /> */}
           </div>
         </div>
       </div>

@@ -17,6 +17,7 @@ buttons:
   register: Регистрация
   logout: Выход
   add: Добавить
+  profile: Профиль
 login_popup:
   title: Вход
   not_registered: Еще не зарегестрированы?

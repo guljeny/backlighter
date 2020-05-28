@@ -1,6 +1,8 @@
-@import 'client/styles/colors';
+@import '$styles/colors';
+@import '$styles/mixins';
 
 .devise-list {
+  @include defaultGred();
   &__wrapper {
     margin: 0 -10px;
   }
