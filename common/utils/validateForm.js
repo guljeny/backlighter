@@ -15,8 +15,13 @@ function repeatPassword ({ password, repeatPassword }) {
   return null
 }
 
-function deviseName ({ deviseName }) {
-  if (!deviseName) return ['errors.user.not_be_empty']
+function deviceName ({ deviceName }) {
+  if (!deviceName) return ['errors.user.not_be_empty']
+  return null
+}
+
+function roomName ({ roomName }) {
+  if (!roomName) return ['errors.user.not_be_empty']
   return null
 }
 
@@ -29,7 +34,8 @@ const validators = {
   email,
   password,
   repeatPassword,
-  deviseName,
+  deviceName,
+  roomName,
   uid,
 }
 

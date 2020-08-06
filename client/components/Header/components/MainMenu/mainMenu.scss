@@ -1,0 +1,62 @@
+@import '$styles/colors';
+
+.main-menu {
+  z-index: 15;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  pointer-events: none;
+  transition: .3s ease-out;
+  &--open {
+    opacity: 1;
+    pointer-events: all;
+    background: rgba(180, 195, 212, 0.31);
+    .main-menu__inner {
+      transform: translateX(0);
+    }
+  }
+  &__inner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 300px;
+    background: $main-blue;
+    box-shadow: 0 0 17px rgba(0,0,0, 0.5);
+    transform: translateX(-300px);
+    transition: .3s ease-out;
+    padding: 70px 0 0;
+  }
+  nav {
+    display: block;
+    a {
+      position: relative;
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 15px 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+      &:last-child {
+        border-bottom: none;
+      }
+      &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        background: $accent;
+        transform: scale(0);
+        transition: .3s;
+      }
+      &.active {
+        &:before {
+          transform: scale(1);
+        }
+      }
+    }
+  }
+}

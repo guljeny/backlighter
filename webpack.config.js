@@ -21,6 +21,7 @@ module.exports = {
       '$modules': path.resolve(__dirname, './client/modules/'),
       '$store': path.resolve(__dirname, './client/store.js'),
       '$styles': path.resolve(__dirname, './client/styles'),
+      '$images': path.resolve(__dirname, './client/images'),
       '$common': path.resolve(__dirname, './common/'),
     },
   },
@@ -35,9 +36,20 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.s[ac]ss$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)$/i,
         use: 'file-loader',
       },
+      // {
+      //   test: /\.svg$/,
+      //   loader: 'svg-inline-loader',
+      //   // options: {
+      //   //   removingTagAttrs: ['viewBox', 'fill'],
+      //   // },
+      // },
       {
         test: /\.ya?ml$/,
         type: 'json',
@@ -51,10 +63,6 @@ module.exports = {
           presets: ['@babel/preset-env', '@babel/preset-react'],
           plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime'],
         },
-      },
-      {
-        test: /\.s[ac]ss$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
     ],
   },

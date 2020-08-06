@@ -1,11 +1,11 @@
 user:
   connect: 'USER:CONNECT'
-deviseList:
-  updateOne: 'DEVISE_LIST:UPDATE_ONE'
-  updateAll: 'DEVISE_LIST:UPDATE_ALL'
-devise:
-  verifyOwner: 'DEVISE:VERIFY_OWNER'
-  verifyMe: 'DEVISE:VERIFY_ME'
-  updateFirmware: 'DEVISE:UPDATE_FIRMWARE'
-  connect: 'DEVISE:CONNECT'
-  setState: 'DEVISE:SET_STATE'
+deviceList:
+  updateOne: 'DEVICE_LIST:UPDATE_ONE'
+  updateAll: 'DEVICE_LIST:UPDATE_ALL'
+device:
+  verifyOwner: 'DEVICE:VERIFY_OWNER'
+  verifyMe: 'DEVICE:VERIFY_ME'
+  updateFirmware: 'DEVICE:UPDATE_FIRMWARE'
+  connect: 'DEVICE:CONNECT'
+  setState: 'DEVICE:SET_STATE'

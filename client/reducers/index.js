@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import user from './user'
 import popups from './popups'
-import deviseList from './deviseList'
+import device from './device'
 
 export default combineReducers({
   popups,
   user,
-  deviseList,
+  device,
 })

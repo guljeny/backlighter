@@ -1,32 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
-import { isAddDevisePage } from '$utils/page'
-import NavMenu from './components/NavMenu'
+import page from '$utils/page'
+import NavMenu from '$components/NavMenu'
 import User from './components/User'
+import MenuButton from './components/MenuButton'
 import LoginButtons from './components/LoginButtons'
+import MainMenu from './components/MainMenu'
 import logo from './images/logo.svg'
 
 import './header.scss'
 
 function Header ({ authorized }) {
-  const showControls = !isAddDevisePage()
+  const [isMainMenuOpen, setIsMainMenuOpen] = useState(false)
+  const showControls = !page.isAddDevice()
   return (
     <header className="header">
       <div className="container">
-        <Link className="header__logo" to="/"><img src={logo} alt="logo" /></Link>
+        <MenuButton
+          isOpen={isMainMenuOpen}
+          onClick={() => setIsMainMenuOpen(!isMainMenuOpen)}
+        />
+        <MainMenu
+          isOpen={isMainMenuOpen}
+          handleClose={() => setIsMainMenuOpen(false)}
+        />
+        <Link className="header__logo" to="/">
+          <img src={logo} alt="" />
+        </Link>
         {showControls && (
           <>
-            {authorized ? (
-              <>
-                <NavMenu />
-                <User />
-              </>
-            ) : (
-              <LoginButtons />
-            )}
+            <NavMenu />
+            {authorized ? <User /> : <LoginButtons />}
           </>
         )}
       </div>
@@ -36,7 +43,6 @@ function Header ({ authorized }) {
 
 const mapStateToProps = ({ user }) => ({
   authorized: user.authorized,
-  email: user.email,
 })
 
 export default compose(

@@ -4,12 +4,13 @@ import RegistrationPopup from '$components/popups/RegistrationPopup'
 import { Button } from '$components/form'
 import showPopup from '$utils/showPopup'
 import I18n from '$utils/I18n'
+import loginIcon from '$images/login.svg'
 
 export default function LoginButtons () {
   return (
     <div className="header__buttons">
       <Button
-        modifiers="btn--as-link"
+        modifiers="btn--as-link header__register-button"
         onClick={() => showPopup('registration', RegistrationPopup)}
       >
         <I18n t="buttons.register" />
@@ -18,7 +19,10 @@ export default function LoginButtons () {
         modifiers="header__login-button"
         onClick={() => showPopup('login', LoginPopup)}
       >
-        <I18n t="buttons.login" />
+        <img src={loginIcon} alt="login" />
+        <span>
+          <I18n t="buttons.login" />
+        </span>
       </Button>
     </div>
   )

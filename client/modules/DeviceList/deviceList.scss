@@ -1,0 +1,9 @@
+@import '$styles/colors';
+@import '$styles/mixins';
+
+.device-list {
+  display: grid;
+  grid-gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(305px, 1fr));
+  padding: 15px;
+}

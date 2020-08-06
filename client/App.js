@@ -12,8 +12,8 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Popup from './components/Popup'
 import GlobalLoader from './components/GlobalLoader'
-import AddDevise from './modules/AddDevise'
-import DeviseList from './modules/DeviseList'
+import AddDevice from './modules/AddDevice'
+import DeviceList from './modules/DeviceList'
 import Shop from './modules/Shop'
 
 import './app.scss'
@@ -38,11 +38,12 @@ export default class App extends React.Component {
       <Provider store={store}>
         <Router>
           <Header />
-          <div className="content">
+          <div className="content container">
             <Switch>
-              <Route exact path="/devise/add/:uid" component={AddDevise} />
+              <Route exact path="/device/add/:uid" component={AddDevice} />
+              <Route exact path="/devise/add/:uid" component={AddDevice} />
               <Route exact path="/" component={Shop} />
-              <Route exact path="/devises" component={DeviseList} />
+              <Route exact path="/control-panel" component={DeviceList} />
             </Switch>
           </div>
           <Footer />

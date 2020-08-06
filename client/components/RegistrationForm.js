@@ -5,7 +5,7 @@ import api from '$api/user'
 import I18n from '$utils/I18n'
 import validateForm from '$utils/validateForm'
 import checkIsFormValid from '$utils/checkIsFormValid'
-import { Field, Button } from '$components/form'
+import { Input, Button } from '$components/form'
 import { updateUser, CONNECT_USER } from '$actions/user'
 import socket from '$socket'
 
@@ -35,9 +35,9 @@ function RegistrationForm ({ onSuccess, updateUser, showLogin }) {
     >
       {({ handleSubmit, values, errors }) => (
         <form className="form" onSubmit={handleSubmit}>
-          <Field name="email"><input /></Field>
-          <Field name="password"><input type="password" /></Field>
-          <Field name="repeatPassword"><input type="password" /></Field>
+          <Input name="email" />
+          <Input name="password" type="password" />
+          <Input name="repeatPassword" type="password" />
           <div className="form__buttons">
             <Button loading={loading} disabled={!checkIsFormValid(values, errors)}>
               <I18n t="buttons.register" />

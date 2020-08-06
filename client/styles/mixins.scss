@@ -1,7 +1,23 @@
-@mixin defaultGred {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: max-content;
-  grid-gap: 15px;
-  padding: 15px;
+@mixin max-width ($width) {
+  @media(screen and max-width: $width) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @include max-width (1280px) {
+    @content;
+  }
+}
+
+@mixin md {
+  @include max-width (974px) {
+    @content;
+  }
+}
+
+@mixin sm {
+  @include max-width (660px) {
+    @content;
+  }
 }

@@ -8,12 +8,14 @@
 input {
   display: block;
   width: 100%;
+  margin: 0;
   padding: 8px;
   color: $light-blue;
   font-size: 14px;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: 1px solid $border;
   border-radius: 4px;
+  background: $main-blue;
   outline: none;
   transition: .2s;
   &::-webkit-autofill {
@@ -36,6 +38,27 @@ input {
   }
   &__field {
     margin-bottom: 15px;
+  }
+  &__field-button {
+    position: absolute;
+    z-index: 4;
+    top: 1px;
+    right: 1px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: $border;
+    border: none;
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+    transition: .3s;
+    &:hover {
+      background: $dark-blue;
+      cursor: pointer;
+    }
+    &:disabled {
+      opacity: .3;
+    }
   }
   &__field-error {
     input {

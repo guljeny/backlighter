@@ -11,7 +11,8 @@ fields:
   email: E-mail
   password: Пароль
   repeat_password: Повторите пароль
-  devise_name: Название устройства
+  device_name: Название устройства
+  room_name: Название комнаты
 buttons:
   login: Войти
   register: Регистрация
@@ -24,3 +25,9 @@ login_popup:
 register_popup:
   title: Регистрация
   already_registered: Уже есть аккаунт?
+room_menu:
+  add_room: Добавить комнату
+  all_devices: Все устройства
+navigation:
+  shop: Магазин
+  cp:  Панель управления

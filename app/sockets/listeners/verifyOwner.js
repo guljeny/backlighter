@@ -1,12 +1,12 @@
-const Devise = require('$app/models/Devise')
+const Device = require('$app/models/Device')
 const notify = require('$utils/notify')
-const { deviseStore } = require('../stores')
-const { deviseList } = require('../actions')
+const { deviceStore } = require('../stores')
+const { deviceList } = require('../actions')
 
 module.exports = async socket => {
-  const uid = deviseStore.findBySocketId(socket.id)
+  const uid = deviceStore.findBySocketId(socket.id)
   if (!uid) return
-  const devise = await Devise.findBy({ uid })
-  await devise.setIsVerified()
-  notify.user(devise.get('owner'), deviseList.updateOne, devise.get())
+  const device = await Device.findBy({ uid })
+  await device.setIsVerified()
+  notify.user(device.get('owner'), deviceList.updateOne, device.get())
 }

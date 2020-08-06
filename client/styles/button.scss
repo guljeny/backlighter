@@ -17,6 +17,9 @@
   overflow: hidden;
   z-index: 0;
   transition: .3s;
+  @include sm {
+    padding: 0 24px;
+  }
   &--primary {
     background: $accent;
     color: white;
@@ -28,7 +31,7 @@
   &--as-link {
     color: $light;
     background: transparent;
-    height: auto;
+    height: 20px;
     margin: 0;
     padding: 2px 4px;
     border-bottom: 1px solid #676767;

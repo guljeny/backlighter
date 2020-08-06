@@ -1,5 +1,5 @@
 import Errors from './Errors'
-import Field from './Field'
+import Input from './Input'
 import Button from './Button'
 
-export { Errors, Field, Button }
+export { Errors, Input, Button }

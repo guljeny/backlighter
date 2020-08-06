@@ -25,6 +25,7 @@ jobs:
     - name: install arduino cli
       # if: steps.build_info.outputs.is_changed > 0
       run:  curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+      # run:  curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/0.10.0/install.sh | sh
 
     - name: install socket.io lib
       # if: steps.build_info.outputs.is_changed > 0
@@ -52,36 +53,36 @@ jobs:
         npm run create:version
         npm run create:connect-page
 
-    - name: compile single
+    # - name: compile single
+    #   # if: steps.build_info.outputs.is_changed > 0
+    #   run: |
+    #     npm run create:devise-type-single
+    #     sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./esp8266_firmware/esp8266_firmware.ino -o ./esp8266_firmware/single.bin
+
+    - name: compile rgb-pillar
       # if: steps.build_info.outputs.is_changed > 0
       run: |
-        npm run create:devise-type-single
-        sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./esp8266_firmware/esp8266_firmware.ino -o ./esp8266_firmware/single.bin
+        npm run create:device-type-rgb-pillar
+        sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./esp8266_firmware/esp8266_firmware.ino --output-dir ./esp8266_firmware/rgb-pillar.bin
 
-    - name: compile rgb
-      # if: steps.build_info.outputs.is_changed > 0
-      run: |
-        npm run create:devise-type-rgb
-        sudo ./bin/arduino-cli compile --fqbn esp8266:esp8266:d1 ./esp8266_firmware/esp8266_firmware.ino -o ./esp8266_firmware/rgb.bin
+    # - name: Deploy single firmvare to Server
+    #   # if: steps.build_info.outputs.is_changed > 0
+    #   uses: easingthemes/ssh-deploy@v2.1.1
+    #   env:
+    #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+    #     REMOTE_HOST: ${{ secrets.HOST}}
+    #     REMOTE_USER: ${{ secrets.USER}}
+    #     SOURCE: "esp8266_firmware/single.bin"
+    #     TARGET: "/root/backlighter/dist/esp8266_firmware/"
 
-    - name: Deploy single firmvare to Server
+    - name: Deploy rgb-pillar firmvare to Server
       # if: steps.build_info.outputs.is_changed > 0
       uses: easingthemes/ssh-deploy@v2.1.1
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         REMOTE_HOST: ${{ secrets.HOST}}
         REMOTE_USER: ${{ secrets.USER}}
-        SOURCE: "esp8266_firmware/single.bin"
-        TARGET: "/root/backlighter/dist/esp8266_firmware/"
-
-    - name: Deploy rgb firmvare to Server
-      # if: steps.build_info.outputs.is_changed > 0
-      uses: easingthemes/ssh-deploy@v2.1.1
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        REMOTE_HOST: ${{ secrets.HOST}}
-        REMOTE_USER: ${{ secrets.USER}}
-        SOURCE: "esp8266_firmware/rgb.bin"
+        SOURCE: "esp8266_firmware/rgb-pillar.bin"
         TARGET: "/root/backlighter/dist/esp8266_firmware/"
 
   build:
@@ -93,8 +94,8 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Lint
-      run: npm run lint
+    # - name: Lint
+    #   run: npm run lint
 
     - name: Build
       run: npm run build

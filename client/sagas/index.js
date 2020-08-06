@@ -1,8 +1,8 @@
 import { all } from 'redux-saga/effects'
-import deviseList from './deviseList'
+import deviceList from './device'
 
 export default function* rootSaga () {
   yield all([
-    deviseList(),
+    deviceList(),
   ])
 }

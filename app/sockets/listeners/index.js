@@ -1,9 +1,9 @@
-const deviseConnection = require('./deviseConnection')
+const deviceConnection = require('./deviceConnection')
 const verifyOwner = require('./verifyOwner')
 const userConnection = require('./userConnection')
 
 module.exports = {
-  deviseConnection,
+  deviceConnection,
   verifyOwner,
   userConnection,
 }

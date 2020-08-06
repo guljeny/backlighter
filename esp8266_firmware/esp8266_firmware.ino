@@ -6,7 +6,7 @@
 #include <string.h>
 #include "./version.h"
 #include "./connect_page.h"
-#include "./devise_type.h"
+#include "./device_type.h"
 
 SocketIoClient webSocket;
 ESP8266WebServer server(80);
@@ -157,29 +157,29 @@ void startConnection (const char * enable, size_t length) {
   strcat(data, uid);
   strcat(data, "\",\"version\":\"");
   strcat(data, version);
-  strcat(data, "\",\"deviseType\":\"");
-  strcat(data, DEVISE_TYPE);
+  strcat(data, "\",\"deviceType\":\"");
+  strcat(data, DEVICE_TYPE);
   strcat(data, "\"}");
-  webSocket.emit("DEVISE:CONNECT", data);
+  webSocket.emit("DEVICE:CONNECT", data);
 }
 
 void verifyOwner (const char * enable, size_t length) {
   if (getOwner() != 255) {
-    webSocket.emit("DEVISE:VERIFY_ME");
+    webSocket.emit("DEVICE:VERIFY_ME");
     setOwner(255);
   }
 }
 
 void updateFirmware (const char * enable, size_t length) {
   char url[30] = "/esp8266/last/";
-  strcat(url, DEVISE_TYPE);
+  strcat(url, DEVICE_TYPE);
   /* ESPhttpUpdate.update("192.168.100.114", 3000, url); */
   ESPhttpUpdate.update("195.2.93.153", 80, url);
 }
 
-void setDeviseStatus (const char * status, size_t length) {
+void setDeviceStatus (const char * status, size_t length) {
   char * s_status = strdup(status);
-  Serial.print("devise status: ");
+  Serial.print("device status: ");
   Serial.println(s_status);
   enabled = atoi(strtok(s_status, ":"));
   bright = atoi(strtok(NULL, ":"));
@@ -233,6 +233,8 @@ void setup() {
     connectToWifi(ssid, pass);
   } else {
     setOnCount(0);
+    setOwner(0);
+    saveCredentioals("", "");
     startAP();
   }
 
@@ -255,9 +257,9 @@ void loop() {
     webSocket.begin("195.2.93.153");
     /* webSocket.begin("192.168.100.114", 3000); */
     webSocket.on("connect", startConnection);
-    webSocket.on("DEVISE:VERIFY_OWNER", verifyOwner);
-    webSocket.on("DEVISE:SET_STATE", setDeviseStatus);
-    webSocket.on("DEVISE:UPDATE_FIRMWARE", updateFirmware);
+    webSocket.on("DEVICE:VERIFY_OWNER", verifyOwner);
+    webSocket.on("DEVICE:SET_STATE", setDeviceStatus);
+    webSocket.on("DEVICE:UPDATE_FIRMWARE", updateFirmware);
     status="connect";
   }
   if ((strcmp(status, "wait")==0 && millis() - connectStart > 15000) || WiFi.status() == WL_CONNECT_FAILED ) {

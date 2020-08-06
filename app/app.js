@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 const { mongoConnectionUrl } = require('$config')
+const response = require('$utils/response')
 
 const store = new MongoDBStore({
   uri: mongoConnectionUrl,
@@ -25,6 +26,15 @@ app.use(session({
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  next()
+})
+app.use((req, res, next) => {
+  res.sendStatus = {
+    success: data => response.success(res, data),
+    unauthorized: () => response.unauthorized(res),
+    unprocessableEntity: errors => response.unprocessableEntity(res, errors),
+    notFound: errors => response.notFound(res, errors),
+  }
   next()
 })
 

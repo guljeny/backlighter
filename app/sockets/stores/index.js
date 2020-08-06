@@ -1,7 +1,7 @@
-const deviseStore = require('./deviseStore')
+const deviceStore = require('./deviceStore')
 const usersStore = require('./usersStore')
 
 module.exports = {
-  deviseStore,
+  deviceStore,
   usersStore,
 }

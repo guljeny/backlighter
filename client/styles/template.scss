@@ -1,3 +1,5 @@
+@import '$styles/mixins';
+
 * {
   box-sizing: border-box;
   font-family: 'Roboto', Arial, sans-serif;
@@ -15,6 +17,7 @@ body {
   color: $light;
   &:after {
     content: '';
+    z-index: 0;
     position: absolute;
     top: 0;
     left: 0;
@@ -30,6 +33,8 @@ body {
 }
 
 .page {
+  z-index: 1;
+  position: relative;
   display: grid;
   grid-template-columns:1fr;
   grid-template-rows: 60px 1fr 54px;
@@ -45,16 +50,18 @@ header {
 
 .content {
   min-height: calc(100vh - 114px);
-  display: flex;
   grid-area: content;
-}
-
-footer {
-  grid-area: footer;
 }
 
 .container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1296px;
   margin: 0 auto;
+  @include sm {
+    width: 100vw;
+  }
+}
+
+footer {
+  grid-area: footer;
 }

@@ -12,8 +12,8 @@
     "lint": "npx eslint ./client && npx eslint ./app",
     "create:version": "bin/create_version",
     "create:connect-page": "node bin/makeConnetionPage.js",
-    "create:devise-type-rgb": "bin/create_devise_type rgb",
-    "create:devise-type-single": "bin/create_devise_type single"
+    "create:device-type-rgb-pillar": "bin/create_device_type rgb_pillar",
+    "create:device-type-single": "bin/create_device_type single"
   },
   "author": "Jenya Gul",
   "license": "ISC",
@@ -29,6 +29,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "classnames": "^1.2.2",
+    "colorsys": "^1.0.22",
     "connect-mongodb-session": "^2.3.1",
     "esm": "^3.2.25",
     "express": "^4.17.1",
@@ -50,7 +51,8 @@
     "redux-saga": "^1.1.3",
     "require-yml": "^2.0.0",
     "socket.io": "^2.3.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "styled-components": "^5.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -72,6 +74,7 @@
     "mini-css-extract-plugin": "^0.9.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
+    "svg-inline-loader": "^0.8.2",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "yaml-loader": "^0.6.0"
