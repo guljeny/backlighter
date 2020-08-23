@@ -1,6 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import selection from '$utils/selection'
+import isMobile from '$utils/isMobile'
 
 import './slider.scss'
 
@@ -35,15 +36,22 @@ export default class Slider extends React.Component {
   startDrag = e => {
     e.stopPropagation()
     selection.disable()
-    document.addEventListener('mousemove', this.setToMousePosition)
-    document.addEventListener('mouseup', this.onMouseUp)
+    if (isMobile) {
+      document.addEventListener('touchmove', this.setToMousePosition, { passive: false })
+      document.addEventListener('touchend', this.onMouseUp)
+    } else {
+      document.addEventListener('mousemove', this.setToMousePosition)
+      document.addEventListener('mouseup', this.onMouseUp)
+    }
     const { left, width } = this.containerRef.current.getBoundingClientRect()
     this.leftPoint = left
     this.width = width
   }
 
   setToMousePosition = e => {
-    let percent = (e.clientX - this.leftPoint) / this.width
+    e.preventDefault()
+    const event = e.touches ? e.touches[0] : e
+    let percent = (event.clientX - this.leftPoint) / this.width
     if (percent > 1) percent = 1
     if (percent < 0) percent = 0
     const { lines, bigLines, magnetic, onChange, from, to } = this.props
@@ -59,8 +67,10 @@ export default class Slider extends React.Component {
   }
 
   onMouseUp = () => {
+    document.removeEventListener('touchmove', this.setToMousePosition)
     document.removeEventListener('mousemove', this.setToMousePosition)
-    document.removeEventListener('mouseup', this.setToMousePosition)
+    document.removeEventListener('mouseup', this.onMouseUp)
+    document.removeEventListener('touchend', this.onMouseUp)
     selection.enable()
   }
 
@@ -73,6 +83,7 @@ export default class Slider extends React.Component {
         <div
           className="slider__circle"
           onMouseDown={this.startDrag}
+          onTouchStart={this.startDrag}
           ref={this.circleRef}
         />
         {linesArray.map((e, i) => (
