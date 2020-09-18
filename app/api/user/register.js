@@ -4,14 +4,10 @@ const validateForm = require('$utils/validateForm')
 module.exports = async function register (req, res) {
   const { email, password, repeatPassword } = req.body
   const errors = validateForm({ email, password, repeatPassword })
-  if (errors) {
-    res.sendStatus.unprocessableEntity(errors)
-    return
-  }
+  if (errors) return res.sendStatus.unprocessableEntity(errors)
   const user = await User.findBy({ email })
   if (user) {
-    res.sendStatus.unprocessableEntity({ email: ['errors.user.already_exists'] })
-    return
+    return res.sendStatus.unprocessableEntity({ email: ['errors.user.already_exists'] })
   }
   const registeredUser = await User.register({ email, password })
   const userData = registeredUser.values()
