@@ -1,7 +1,8 @@
 import React from 'react'
 import classnames from 'classnames'
 import selection from '$utils/selection'
-import isMobile from '$utils/isMobile'
+import scroll from '$utils/scroll'
+import isTouch from '$utils/isTouch'
 
 import './slider.scss'
 
@@ -36,9 +37,10 @@ export default class Slider extends React.Component {
   startDrag = e => {
     e.stopPropagation()
     selection.disable()
-    if (isMobile) {
+    if (isTouch) {
       document.addEventListener('touchmove', this.setToMousePosition, { passive: false })
       document.addEventListener('touchend', this.onMouseUp)
+      scroll.disable()
     } else {
       document.addEventListener('mousemove', this.setToMousePosition)
       document.addEventListener('mouseup', this.onMouseUp)
@@ -72,6 +74,7 @@ export default class Slider extends React.Component {
     document.removeEventListener('mouseup', this.onMouseUp)
     document.removeEventListener('touchend', this.onMouseUp)
     selection.enable()
+    scroll.enable()
   }
 
   render () {

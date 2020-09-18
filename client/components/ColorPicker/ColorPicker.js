@@ -1,5 +1,4 @@
 import React from 'react'
-import classnames from 'classnames'
 import colorsys from 'colorsys'
 import SelectWheel from './SelectWheel'
 import SelectedColor from './SelectedColor'
@@ -14,6 +13,16 @@ export default class ColorPicker extends React.PureComponent {
       id,
     })),
     selectedColor: 0,
+  }
+
+  // eslint-disable-next-line
+  UNSAFE_componentWillReceiveProps (props) {
+    this.setState({
+      colors: props.colors.map(([r, g, b], id) => ({
+        angle: colorsys.rgbToHsv({ r, g, b }).h,
+        id,
+      })),
+    })
   }
 
   handleChange = () => {

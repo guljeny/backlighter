@@ -1,8 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-// import { HuePicker } from 'react-color'
-// import PowerButton from '../PowerButton'
-// import Bright from '../Bright'
+import { connect } from 'react-redux'
 import api from '$api/device'
 import throttle from '$utils/throttle'
 import ColorPicker from '$components/ColorPicker'
@@ -10,20 +8,24 @@ import Slider from '$components/Slider'
 import OnlineStatus from '$components/OnlineStatus'
 import brightIcon from '$images/bright.svg'
 import speedIcon from '$images/speed.svg'
+import { updateDevice } from '$actions/device'
 
 import openIcon from '$images/arrow.svg'
 
 import './deviceCard.scss'
 
-export default class DeviceCard extends React.Component {
+class DeviceCard extends React.Component {
   setColors = throttle(colors => {
-    const { uid } = this.props
+    const { uid, updateDevice } = this.props
+    updateDevice({ uid, colors })
     api.update(uid, { colors })
   }, 100)
 
-  setBright = throttle(bright => {
-    const { uid } = this.props
-    api.update(uid, { bright: Math.round(bright) })
+  setBright = throttle(_bright => {
+    const { uid, updateDevice } = this.props
+    const bright = Math.round(_bright)
+    api.update(uid, { bright })
+    updateDevice({ uid, bright })
   }, 100)
 
   disable = () => {
@@ -36,10 +38,10 @@ export default class DeviceCard extends React.Component {
     api.update(uid, { enabled: true })
   }
 
-  update = () => {
-    const { uid } = this.props
-    api.updateFirmware(uid)
-  }
+  // update = () => {
+  //   const { uid } = this.props
+  //   api.updateFirmware(uid)
+  // }
 
   render () {
     const { name, enabled, isOnline, bright, uid, colors } = this.props
@@ -71,7 +73,7 @@ export default class DeviceCard extends React.Component {
             <img src={speedIcon} alt="" />
             <Slider from={-1} to={1} />
           </div>
-          <button onClick={this.update}>update</button>
+          {/* <button onClick={this.update}>update</button> */}
         </div>
         {/* <Bright bright={bright} uid={uid} /> */}
         {/* <PowerButton */}
@@ -83,3 +85,5 @@ export default class DeviceCard extends React.Component {
     )
   }
 }
+
+export default connect(null, { updateDevice })(DeviceCard)

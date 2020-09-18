@@ -3,7 +3,8 @@ import classnames from 'classnames'
 import colorsys from 'colorsys'
 import angleBetween from '$utils/angleBetween'
 import selection from '$utils/selection'
-import isMobile from '$utils/isMobile'
+import isTouch from '$utils/isTouch'
+import scroll from '$utils/scroll'
 import powerIcon from '$images/power.svg'
 
 import './colorPicker.scss'
@@ -32,9 +33,10 @@ export default class SelectWheel extends React.PureComponent {
     this._mouseMoved = false
     this.setState({ scrollNow: true })
     selection.disable()
-    if (isMobile) {
+    if (isTouch) {
       document.addEventListener('touchmove', this.mouseMove, { passive: false })
       document.addEventListener('touchend', this.mouseUp)
+      scroll.disable()
     } else {
       document.addEventListener('mousemove', this.mouseMove)
       document.addEventListener('mouseup', this.mouseUp)
@@ -44,6 +46,7 @@ export default class SelectWheel extends React.PureComponent {
   mouseUp = () => {
     this.setState({ scrollNow: false })
     selection.enable()
+    scroll.enable()
     document.removeEventListener('touchmove', this.mouseMove)
     document.removeEventListener('touchend', this.mouseUp)
     document.removeEventListener('mousemove', this.mouseMove)
@@ -86,8 +89,8 @@ export default class SelectWheel extends React.PureComponent {
             'color-picker__selector',
             !scrollNow && 'color-picker__selector--with-animation',
           )}
-          onMouseDown={this.startScroll}
-          onTouchStart={this.startScroll}
+          onMouseDown={isTouch ? null : this.startScroll}
+          onTouchStart={isTouch ? this.startScroll : null}
         />
         <div className="color-picker__power-button-container">
           <div className="color-picker__power-button">

@@ -13,7 +13,7 @@ module.exports = async function update (req, res) {
     res.sendStatus.unauthorized()
     return
   }
-  const { uid, ...rest } = req.body
+  const { uid, clientUid, ...rest } = req.body
   const device = await Device.findBy({ uid })
   if (!device || !ObjectId(userId).equals(device.get('owner'))) {
     res.sendStatus.unprocessableEntity()
@@ -23,6 +23,6 @@ module.exports = async function update (req, res) {
   if (Object.keys(rest).some(key => fieldsToNotify.includes(key))) {
     device.notify()
   }
-  notify.user(userId, deviceList.updateOne, { uid, ...rest })
+  notify.user(userId, deviceList.updateOne, { uid, ...rest, clientUid })
   res.sendStatus.success()
 }
