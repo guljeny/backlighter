@@ -15,28 +15,33 @@ import openIcon from '$images/arrow.svg'
 import './deviceCard.scss'
 
 class DeviceCard extends React.Component {
-  setColors = throttle(colors => {
+  sendData = throttle((uid, data) => {
+    api.update(uid, data)
+  }, 100)
+
+  setColors = colors => {
     const { uid, updateDevice } = this.props
     updateDevice({ uid, colors })
-    api.update(uid, { colors })
-  }, 100)
+    this.sendData(uid, { colors })
+  }
 
-  setBright = throttle(_bright => {
+  setBright = _bright => {
     const { uid, updateDevice } = this.props
     const bright = Math.round(_bright)
-    api.update(uid, { bright })
     updateDevice({ uid, bright })
-  }, 100)
-
-  disable = () => {
-    const { uid } = this.props
-    api.update(uid, { enabled: false })
+    this.sendData(uid, { bright })
   }
 
-  enable = () => {
-    const { uid } = this.props
-    api.update(uid, { enabled: true })
-  }
+  // disable = () => {
+  //   const { uid } = this.props
+  //   api.update(uid, { enabled: false })
+  // }
+
+  // enable = () => {
+  //   const { uid } = this.props
+  //   api.update(uid, { enabled: true })
+  // }
+
 
   // update = () => {
   //   const { uid } = this.props

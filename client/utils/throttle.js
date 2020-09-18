@@ -9,7 +9,6 @@ export default function throttle (func, time) {
       func.apply(context, args)
     }, time)
     if (!inThrottle) {
-      func.apply(context, args)
       inThrottle = true
       setTimeout(() => {
         inThrottle = false
