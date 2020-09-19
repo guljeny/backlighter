@@ -17,16 +17,14 @@
   overflow: hidden;
   z-index: 0;
   transition: .3s;
+  background: $accent;
+  color: white;
+  &:hover {
+    background: darken($accent, 10);
+    cursor: pointer;
+  }
   @include sm {
     padding: 0 24px;
-  }
-  &--primary {
-    background: $accent;
-    color: white;
-    &:hover {
-      background: darken($accent, 10);
-      cursor: pointer;
-    }
   }
   &--as-link {
     color: $light;
@@ -60,5 +58,6 @@
   &:disabled {
     pointer-events: none;
     background: #464b52;
+    color: #61696f;
   }
 }

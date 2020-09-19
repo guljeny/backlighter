@@ -12,8 +12,8 @@ module.exports = class Device {
     return device && new Device(device)
   }
 
-  static async add ({ uid, owner = null, ...rest }) {
-    if (!uid) throw new Error('cannot add device w/o uid')
+  static async create ({ uid, owner = null, ...rest }) {
+    if (!uid) throw new Error('cannot create device w/o uid')
     const data = {
       uid,
       owner,

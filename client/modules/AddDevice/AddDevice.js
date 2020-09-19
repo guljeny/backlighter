@@ -41,7 +41,7 @@ class AddDevice extends React.Component {
     const { uid } = match.params
     const { isLoginFormActive, loading } = this.state
     return (
-      <div className="container add-device">
+      <div className="add-device">
         {authorized ? (
           <Formik
             initialValues={{ deviceName: '', uid }}

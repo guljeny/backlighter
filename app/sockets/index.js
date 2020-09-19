@@ -14,8 +14,9 @@ module.exports = function bootstrapSockets () {
       const uid = deviceStore.findBySocketId(socket.id)
       if (uid) {
         const deviceSockets = deviceStore.findByUid(uid)
-        // when device reconnect, old socket delete after some time
-        // and disconnect trigger when socket stay one
+        // when device reconnect, disconnect may be called
+        // after called connect socket
+        // disconnect trigger when socket stay one
         if (deviceSockets && deviceSockets.all.length === 1) {
           const device = await Device.findBy({ uid })
           if (device) {

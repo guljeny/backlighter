@@ -41,7 +41,6 @@ export default class App extends React.Component {
           <div className="content container">
             <Switch>
               <Route exact path="/device/add/:uid" component={AddDevice} />
-              <Route exact path="/devise/add/:uid" component={AddDevice} />
               <Route exact path="/" component={Shop} />
               <Route exact path="/control-panel" component={DeviceList} />
             </Switch>
