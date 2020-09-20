@@ -44,7 +44,12 @@
     height: 100px;
     background: $main-blue;
     border-radius: 50%;
-    box-shadow: 0px 0px 16px #00ffa3;
+    border: none;
+    outline: none;
+    box-shadow: 0px 0px 16px $accent;
+    &--enabled {
+      box-shadow: 0px 0px 16px #00ffa3;
+    }
     img {
       width: 20px;
     }
@@ -153,5 +158,43 @@
     border: 1px solid #fff;
     border-radius: 50%;
     font-size: 18px;
+  }
+  &--disabled {
+    .color-picker__selector {
+      background: $main-blue;
+      pointer-events: none;
+    }
+    .color-picker__power-button-container {
+      box-shadow: inset 1px 1px 8px rgba(0, 0, 0, 0.29);
+    }
+    canvas {
+      opacity: 0.1;
+    }
+    .color-picker__selected-color {
+      background: #484c54 !important;
+      &:after {
+          border: 1px solid #3e4349;
+      }
+    }
+    .color-picker__color-dot {
+      background: #424750 !important;
+      box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.16);
+      pointer-events: none;
+    }
+    .color-picker__color-inner {
+      border: 1px solid #3e4349;
+      box-shadow: 0px 0px 6px rgb(0, 0, 0, 0.16);
+      pointer-events: none;
+      svg {
+        path {
+          fill: #3e4349;
+        }
+      }
+    }
+    .color-picker__add-color {
+      border: 1px solid #3e4349;
+      color: #3e4349;
+      pointer-events: none;
+    }
   }
 }

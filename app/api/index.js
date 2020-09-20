@@ -8,7 +8,7 @@ module.exports = function bootstrapApi () {
   app.post('/api/user/register', user.register)
   app.post('/api/user/login', user.login)
   app.get('/api/user/logout', user.logout)
-  app.post('/api/device/add', device.add)
+  app.post('/api/device/create', device.create)
   app.get('/api/device/list', device.list)
   app.post('/api/device/update', device.update)
   app.post('/api/device/update_firmware', device.updateFirmware)

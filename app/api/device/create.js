@@ -3,7 +3,7 @@ const Device = require('$models/Device')
 const validateForm = require('$utils/validateForm')
 const notify = require('$utils/notify')
 
-module.exports = async function add (req, res) {
+module.exports = async function create (req, res) {
   const { userId } = req.session
   const user = await User.findBy({ id: userId })
   if (!user) return res.sendStatus.unauthorized()

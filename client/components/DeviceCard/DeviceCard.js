@@ -32,34 +32,27 @@ class DeviceCard extends React.Component {
     this.sendData(uid, { bright })
   }
 
-  // disable = () => {
-  //   const { uid } = this.props
-  //   api.update(uid, { enabled: false })
-  // }
-
-  // enable = () => {
-  //   const { uid } = this.props
-  //   api.update(uid, { enabled: true })
-  // }
-
-
-  // update = () => {
-  //   const { uid } = this.props
-  //   api.updateFirmware(uid)
-  // }
+  togglePower = () => {
+    const { uid, enabled: _enabled, updateDevice } = this.props
+    const enabled = !_enabled
+    api.update(uid, { enabled })
+    updateDevice({ uid, enabled })
+  }
 
   render () {
-    const { name, enabled, isOnline, bright, uid, colors } = this.props
+    const { name, enabled, isOnline, bright, colors } = this.props
+    const isBlocked = !isOnline || !enabled
     return (
       <div className={
         classnames(
           'device-card',
           !isOnline && 'device-card--offline',
+          isBlocked && 'device-card--disabled',
         )
       }
       >
         <div className="device-card__header">
-          <OnlineStatus isOnline />
+          <OnlineStatus isOnline={isOnline} />
           <div className="device-card__title">
             {name}
           </div>
@@ -69,14 +62,20 @@ class DeviceCard extends React.Component {
           </div>
         </div>
         <div className="device-card__content">
-          <ColorPicker colors={colors} onChange={this.setColors} />
+          <ColorPicker
+            colors={colors}
+            onChange={this.setColors}
+            powerEnabled={enabled}
+            togglePower={this.togglePower}
+            disabled={isBlocked}
+          />
           <div className="device-card__slider">
             <img src={brightIcon} alt="" />
-            <Slider to={255} value={bright} onChange={this.setBright} />
+            <Slider disabled={isBlocked} to={255} value={bright} onChange={this.setBright} />
           </div>
           <div className="device-card__slider">
             <img src={speedIcon} alt="" />
-            <Slider from={-1} to={1} />
+            <Slider disabled={isBlocked} from={-1} to={1} />
           </div>
           {/* <button onClick={this.update}>update</button> */}
         </div>

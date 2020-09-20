@@ -80,6 +80,7 @@ export default class SelectWheel extends React.PureComponent {
 
   render () {
     const { angle, scrollNow } = this.state
+    const { powerEnabled, togglePower } = this.props
     const { r, g, b } = colorsys.hsvToRgb(angle, 100, 100)
     return (
       <div className="color-picker__selector-container">
@@ -93,9 +94,15 @@ export default class SelectWheel extends React.PureComponent {
           onTouchStart={isTouch ? this.startScroll : null}
         />
         <div className="color-picker__power-button-container">
-          <div className="color-picker__power-button">
+          <button
+            onClick={togglePower}
+            className={classnames(
+              'color-picker__power-button',
+              powerEnabled && 'color-picker__power-button--enabled',
+            )}
+          >
             <img src={powerIcon} alt="power" />
-          </div>
+          </button>
         </div>
         <div
           style={{ background: `rgb(${r}, ${g}, ${b})` }}

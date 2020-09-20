@@ -17,9 +17,9 @@ function AddDevice ({ history, authorized, match: { params: { uid } } }) {
   const addDevice = async (values, { setErrors }) => {
     setLoading(true)
     try {
-      const { success, payload } = await api.add(values)
+      const { success, payload } = await api.create(values)
       if (!success) return setErrors(payload)
-      history.replace('/devices')
+      history.replace('/control-panel')
     } catch (errors) {
       setLoading(false)
     }

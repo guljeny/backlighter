@@ -1,6 +1,7 @@
 @import '$styles/colors';
 
 .online-status {
+  flex-shrink: 0;
   width: 6px;
   height: 6px;
   background: $border;
@@ -8,6 +9,5 @@
   &--online {
     background: rgb(87, 255, 154);
     box-shadow: 0px 0px 8px rgba(87, 255, 154, 0.69);
-    flex-shrink: 0;
   }
 }

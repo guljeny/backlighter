@@ -79,10 +79,14 @@ export default class Slider extends React.Component {
 
   render () {
     const { percent } = this.state
-    const { lines, bigLines } = this.props
+    const { lines, bigLines, disabled } = this.props
     const linesArray = [...new Array(lines)]
     return (
-      <div onClick={this.handleClick} className="slider" ref={this.containerRef}>
+      <div
+        onClick={this.handleClick}
+        className={classnames('slider', disabled && 'slider--disabled')}
+        ref={this.containerRef}
+      >
         <div
           className="slider__circle"
           onMouseDown={this.startDrag}

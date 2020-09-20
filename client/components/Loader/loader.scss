@@ -2,10 +2,10 @@
 
 @keyframes color-change {
   0% {
-    fill: $dark-gray;
+    fill: #fff;
   }
   100% {
-    fill: $primary;
+    fill: $accent;
   }
 }
 
@@ -15,6 +15,6 @@
     animation: color-change 1s linear infinite alternate both;
   }
   &_lamp {
-    fill: $dark-gray;
+    fill: $accent;
   }
 }

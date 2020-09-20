@@ -47,7 +47,7 @@ module.exports = class Device {
 
   async update (values) {
     const { uid } = this.device
-    await db.collection('devices').updateOne({ uid }, { $set: getValues(values, restValues) })
+    await db.collection('devices').updateOne({ uid }, { $set: values })
     this.device = { ...this.device, ...values }
   }
 

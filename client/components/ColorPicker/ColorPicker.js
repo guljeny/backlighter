@@ -1,4 +1,5 @@
 import React from 'react'
+import classnames from 'classnames'
 import colorsys from 'colorsys'
 import SelectWheel from './SelectWheel'
 import SelectedColor from './SelectedColor'
@@ -60,13 +61,14 @@ export default class ColorPicker extends React.PureComponent {
 
   render () {
     const { colors, selectedColor } = this.state
+    const { powerEnabled, togglePower, disabled } = this.props
     return (
-      <div className="color-picker">
+      <div className={classnames('color-picker', disabled && 'color-picker--disabled')}>
         <SelectWheel
           setColor={this.setColor}
-          // colors={colors}
           angle={colors[selectedColor].angle}
-          // selectedColor={selectedColor}
+          powerEnabled={powerEnabled}
+          togglePower={togglePower}
         />
         <div className="color-picker__colors-container">
           <PathToColor count={colors.length} selectedColor={selectedColor} />
