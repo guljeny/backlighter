@@ -103,7 +103,7 @@
     }
     &--active {
       .color-picker__color-inner {
-        transform: scale(1);
+        transform: none;
         opacity: 1;
       }
     }
