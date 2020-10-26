@@ -1,11 +1,11 @@
 import React from 'react'
 import classnames from 'classnames'
-import colorsys from 'colorsys'
 import angleBetween from '$utils/angleBetween'
 import selection from '$utils/selection'
 import isTouch from '$utils/isTouch'
 import scroll from '$utils/scroll'
 import powerIcon from '$images/power.svg'
+import ColorBrightLine from './ColorBrightLine'
 
 import './colorPicker.scss'
 
@@ -80,8 +80,7 @@ export default class SelectWheel extends React.PureComponent {
 
   render () {
     const { angle, scrollNow } = this.state
-    const { powerEnabled, togglePower } = this.props
-    const { r, g, b } = colorsys.hsvToRgb(angle, 100, 100)
+    const { powerEnabled, togglePower, setSaturation, saturation } = this.props
     return (
       <div className="color-picker__selector-container">
         <div
@@ -104,13 +103,7 @@ export default class SelectWheel extends React.PureComponent {
             <img src={powerIcon} alt="power" />
           </button>
         </div>
-        <div
-          style={{ background: `rgb(${r}, ${g}, ${b})` }}
-          className={classnames(
-            'color-picker__selected-color',
-            angle >= 45 && angle <= 195 && 'color-picker__selected-color--inverse',
-          )}
-        />
+        <ColorBrightLine angle={angle} setSaturation={setSaturation} saturation={saturation} />
       </div>
     )
   }

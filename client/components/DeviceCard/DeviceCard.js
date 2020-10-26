@@ -72,7 +72,7 @@ class DeviceCard extends React.Component {
           />
           <div className="device-card__slider">
             <img src={brightIcon} alt="" />
-            <Slider disabled={isBlocked} to={255} value={bright} onChange={this.setBright} />
+            <Slider disabled={isBlocked} to={100} value={bright} onChange={this.setBright} />
           </div>
           <div className="device-card__slider">
             <img src={speedIcon} alt="" />

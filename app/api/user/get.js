@@ -6,5 +6,5 @@ module.exports = async function get (req, res) {
     res.sendStatus.success()
     return
   }
-  res.sendStatus.success(user.values())
+  res.sendStatus.success(user.restValues())
 }

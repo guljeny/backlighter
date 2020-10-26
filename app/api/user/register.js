@@ -10,7 +10,7 @@ module.exports = async function register (req, res) {
     return res.sendStatus.unprocessableEntity({ email: ['errors.user.already_exists'] })
   }
   const registeredUser = await User.register({ email, password })
-  const userData = registeredUser.values()
+  const userData = registeredUser.restValues()
   req.session.userId = userData.id
   res.sendStatus.success(userData)
 }

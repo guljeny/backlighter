@@ -24,7 +24,7 @@ module.exports = class User {
     this.user = user
   }
 
-  values () {
+  restValues () {
     const { email, _id } = this.user
     return {
       id: _id,

@@ -20,7 +20,7 @@ module.exports = function bootstrapSockets () {
         if (deviceSockets && deviceSockets.all.length === 1) {
           const device = await Device.findBy({ uid })
           if (device) {
-            notify.user(device.get('owner'), deviceList.updateOne, { uid, isOnline: false })
+            notify.user(device.owner, deviceList.updateOne, { uid, isOnline: false })
           }
         }
         deviceStore.delete(socket.id)

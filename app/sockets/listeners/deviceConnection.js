@@ -9,6 +9,6 @@ module.exports = async ({ uid, version, deviceType }, socket) => {
   if (!device) device = await Device.create({ uid, version, deviceType })
   device.update({ version })
   device.notify()
-  if (device.get('newOwner')) notify.device(uid, deviceActions.verifyOwner)
-  notify.user(device.get('owner'), deviceList.updateOne, { uid, isOnline: true, version })
+  if (device.newOwner) notify.device(uid, deviceActions.verifyOwner)
+  notify.user(device.owner, deviceList.updateOne, { uid, isOnline: true, version })
 }

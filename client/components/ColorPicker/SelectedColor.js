@@ -1,5 +1,4 @@
 import React from 'react'
-import colorsys from 'colorsys'
 import classnames from 'classnames'
 import Trash from '$images/inline/Trash'
 
@@ -14,8 +13,7 @@ export default class SelectedColor extends React.Component {
 
   render () {
     const { isVisible } = this.state
-    const { color, onSelect, onRemove, isActive, showTrash } = this.props
-    const { r, g, b } = colorsys.hsvToRgb(color, 100, 100)
+    const { color: { r, g, b }, onSelect, onRemove, isActive, showTrash } = this.props
     return (
       <div
         className={classnames(

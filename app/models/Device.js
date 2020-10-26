@@ -1,3 +1,4 @@
+const colorsys = require('colorsys')
 const db = require('$utils/db')
 const notify = require('$utils/notify')
 const getValues = require('$utils/getValues')
@@ -18,10 +19,10 @@ module.exports = class Device {
       uid,
       owner,
       verified: false,
-      addTime: Date.now(),
+      createdAt: Date.now(),
       enabled: true,
       bright: 255,
-      colors: [[255, 0, 0]],
+      colors: [[255, 100]],
       ...rest,
     }
     const { ops } = await db.collection('devices').insertOne(data)
@@ -38,42 +39,50 @@ module.exports = class Device {
   constructor (device) {
     if (!device) throw new Error('no device provided in Device.constructor')
     this.device = device
+    return new Proxy(this, {
+      get: (target, name, receiver) => {
+        if (this.device && this.device.hasOwnProperty(name)) {
+          return this.device[name]
+        }
+        return Reflect.get(target, name, receiver)
+      },
+      set: (target, name, value, receiver) => {
+        if (this.device && this.device.hasOwnProperty(name)) {
+          this.device[name] = value
+          const { uid } = this.device
+          db.collection('devices').updateOne({ uid }, { $set: { [name]: value } })
+        }
+        Reflect.set(target, name, value, receiver)
+        return true
+      },
+    })
   }
 
-  get (key) {
-    if (key) return this.device[key]
-    return getValues(this.device, restValues)
+  restValues () {
+    return getValues({
+      ...this.device,
+      isOnline: !!deviceStore.findByUid(this.uid),
+    },
+    restValues)
   }
 
   async update (values) {
-    const { uid } = this.device
+    const { uid } = this
     await db.collection('devices').updateOne({ uid }, { $set: values })
     this.device = { ...this.device, ...values }
   }
 
   async updateFirmware () {
-    const { uid } = this.device
-    notify.device(uid, deviceActions.updateFirmware)
+    notify.device(this.uid, deviceActions.updateFirmware)
   }
 
   notify () {
-    const { uid, enabled, bright, colors } = this.device
-    const [r, g, b] = colors[0]
-    notify.device(uid, deviceActions.setState, `${enabled ? 1 : 0}:${bright}:${r}:${g}:${b}`)
-  }
-
-  isVerefied () {
-    return this.device.verified
-  }
-
-  async setIsVerified () {
-    const { newOwner, newName } = this.device
-    await this.update({
-      verified: true,
-      owner: newOwner,
-      name: newName,
-      newOwner: null,
-      newName: null,
-    })
+    const { uid, enabled, bright, colors } = this
+    const colorsStr = colors.map(color => {
+      const [h, s] = color
+      const { r, g, b } = colorsys.hsvToRgb(h, s, bright)
+      return `${r}/${g}/${b}`
+    }).join('|')
+    notify.device(uid, deviceActions.setState, `${enabled ? 1 : 0}:${colorsStr}`)
   }
 }

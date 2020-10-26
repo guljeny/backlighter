@@ -9,8 +9,9 @@ import './colorPicker.scss'
 
 export default class ColorPicker extends React.PureComponent {
   state = {
-    colors: this.props.colors.map(([r, g, b], id) => ({
-      angle: colorsys.rgbToHsv({ r, g, b }).h,
+    colors: this.props.colors.map(([r, g], id) => ({
+      angle: r || 0,
+      saturation: g || 0,
       id,
     })),
     selectedColor: 0,
@@ -19,8 +20,9 @@ export default class ColorPicker extends React.PureComponent {
   // eslint-disable-next-line
   UNSAFE_componentWillReceiveProps (props) {
     this.setState({
-      colors: props.colors.map(([r, g, b], id) => ({
-        angle: colorsys.rgbToHsv({ r, g, b }).h,
+      colors: props.colors.map(([r, g], id) => ({
+        angle: r || 0,
+        saturation: g || 0,
         id,
       })),
     })
@@ -28,10 +30,7 @@ export default class ColorPicker extends React.PureComponent {
 
   handleChange = () => {
     const { colors } = this.state
-    this.props.onChange(colors.map(({ angle }) => {
-      const { r, g, b } = colorsys.hsvToRgb(angle, 100, 100)
-      return [r, g, b]
-    }))
+    this.props.onChange(colors.map(({ angle, saturation }) => [angle, saturation]))
   }
 
   selectColor = selectedColor => this.setState({ selectedColor })
@@ -45,9 +44,18 @@ export default class ColorPicker extends React.PureComponent {
     }), this.handleChange)
   }
 
+  setSaturation = saturation => {
+    this.setState(({ colors, selectedColor }) => ({
+      colors: colors.map((color, index) => {
+        if (index === selectedColor) return { ...color, saturation }
+        return color
+      }),
+    }), this.handleChange)
+  }
+
   addColor = () => {
     this.setState(({ colors }) => ({
-      colors: [...colors, { angle: 0, id: Date.now() }],
+      colors: [...colors, { angle: 0, saturation: 100, id: Date.now() }],
       selectedColor: colors.length,
     }), this.handleChange)
   }
@@ -66,19 +74,21 @@ export default class ColorPicker extends React.PureComponent {
       <div className={classnames('color-picker', disabled && 'color-picker--disabled')}>
         <SelectWheel
           setColor={this.setColor}
+          setSaturation={this.setSaturation}
           angle={colors[selectedColor].angle}
+          saturation={colors[selectedColor].saturation}
           powerEnabled={powerEnabled}
           togglePower={togglePower}
         />
         <div className="color-picker__colors-container">
           <PathToColor count={colors.length} selectedColor={selectedColor} />
           <div className="color-picker__colors">
-            {colors.map((color, i) => (
+            {colors.map(({ id, angle, saturation }, i) => (
               <SelectedColor
-                key={color.id}
+                key={id}
                 onSelect={() => this.selectColor(i)}
-                onRemove={() => this.removeColor(color.id)}
-                color={color.angle}
+                onRemove={() => this.removeColor(id)}
+                color={colorsys.hsvToRgb(angle, saturation, 100)}
                 isActive={i === selectedColor}
                 showTrash={colors.length > 1}
               />

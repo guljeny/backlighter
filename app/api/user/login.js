@@ -7,7 +7,7 @@ module.exports = async function login (req, res) {
     res.sendStatus.unprocessableEntity({ email: [], password: ['errors.user.wrong_data'] })
     return
   }
-  const userData = user.values()
+  const userData = user.restValues()
   req.session.userId = userData.id
   res.sendStatus.success(userData)
 }
