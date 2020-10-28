@@ -7,8 +7,8 @@ module.exports = async socket => {
   const uid = deviceStore.findBySocketId(socket.id)
   if (!uid) return
   const device = await Device.findBy({ uid })
-  const { newOwner, newName } = this.device
-  await this.update({
+  const { newOwner, newName } = device
+  await device.update({
     verified: true,
     owner: newOwner,
     name: newName,

@@ -182,11 +182,19 @@ void setDeviceStatus (const char * status, size_t length) {
   Serial.print("device status: ");
   Serial.println(s_status);
   enabled = atoi(strtok(s_status, ":"));
-  bright = atoi(strtok(NULL, ":"));
-  R = atoi(strtok(NULL, ":"));
-  G = atoi(strtok(NULL, ":"));
-  B = atoi(strtok(NULL, ":"));
-  saveSatatus();
+  char * colors = strtok(NULL, ":");
+
+  /* char * bright = strtok(NULL, ":"); */
+  R = atoi(strtok(colors, "/"));
+  G = atoi(strtok(NULL, "/"));
+  B = atoi(strtok(NULL, "/"));
+  Serial.println(R);
+  Serial.println(G);
+  Serial.println(B);
+  /* /1* R = 255; *1/ */
+  /* /1* G = 255; *1/ */
+  /* /1* B = 255; *1/ */
+  /* saveSatatus(); */
   lightControl();
 }
 
