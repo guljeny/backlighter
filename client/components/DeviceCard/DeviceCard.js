@@ -48,8 +48,7 @@ class DeviceCard extends React.Component {
 
   render () {
     const { name, enabled, isOnline, bright, speed, colors } = this.props
-    // const isBlocked = !isOnline || !enabled
-    const isBlocked = false
+    const isBlocked = !isOnline || !enabled
     return (
       <div className={
         classnames(

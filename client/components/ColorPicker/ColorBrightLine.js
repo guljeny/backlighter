@@ -17,6 +17,8 @@ export default class ColorBrightLine extends React.Component {
     this.setState({ draggable: true })
     selection.disable()
     if (isTouch) {
+      document.addEventListener('touchend', this.endDrag)
+      document.addEventListener('touchmove', this.mouseMove, { passive: false })
       scroll.disable()
     } else {
       document.addEventListener('mouseup', this.endDrag)
@@ -39,6 +41,8 @@ export default class ColorBrightLine extends React.Component {
     this.setState({ draggable: false })
     document.removeEventListener('mouseup', this.endDrag)
     document.removeEventListener('mousemove', this.mouseMove)
+    document.removeEventListener('touchend', this.endDrag)
+    document.removeEventListener('touchmove', this.mouseMove)
   }
 
   render () {
@@ -48,7 +52,8 @@ export default class ColorBrightLine extends React.Component {
     return (
       <div
         style={{ background: `rgb(${r}, ${g}, ${b})` }}
-        onMouseDown={this.startDrag}
+        onMouseDown={isTouch ? null : this.startDrag}
+        onTouchStart={isTouch ? this.startDrag : null}
         className={classnames(
           'color-picker__selected-color',
           angle >= 45 && angle <= 195 && 'color-picker__selected-color--inverse',
@@ -61,7 +66,7 @@ export default class ColorBrightLine extends React.Component {
           top={saturation}
           background={colorsys.hsvToRgb(angle + 180, saturation, 100)}
           style={{
-            top: `${2 + saturation / 100 * 88}%`,
+            top: `${4 + saturation / 100 * 86}%`,
             background: `rgb(${[...Array(3)].fill(saturation * 2.55).join(',')}) ${draggable ? '!important' : ''}`,
           }}
         />
