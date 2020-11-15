@@ -39,7 +39,7 @@
           const r = await fetch('/status');
           if(r.status!==200){onE();return;}
           const b = await r.text();
-          if(b=='wait'){setTimeout(chst,2000);return;};
+          if(b=='connecting'){setTimeout(chst,2000);return;};
           if(b=='error'){onE();return;};
         }catch(err){onE();return;};
         setTimeout(()=>{

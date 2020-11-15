@@ -84,6 +84,6 @@ module.exports = class Device {
       return `${r}/${g}/${b}`
     }).join('|')
     console.log('colors', colorsStr)
-    notify.device(uid, deviceActions.setState, `${enabled ? 1 : 0}:${colorsStr}`)
+    notify.device(uid, deviceActions.setState, `${enabled ? 1 : 0}:${colorsStr}:${colors.length}`)
   }
 }
