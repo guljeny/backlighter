@@ -65,7 +65,7 @@ export default class Slider extends React.Component {
     })
     this.circleRef.current.style.left = `${percent * 100}%`
     this.setState({ percent })
-    onChange && onChange(percent * (to - from))
+    onChange && onChange(from + percent * (to - from))
   }
 
   onMouseUp = () => {

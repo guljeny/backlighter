@@ -21,7 +21,7 @@ module.exports = class Device {
       verified: false,
       createdAt: Date.now(),
       enabled: true,
-      bright: 100,
+      bright: 90,
       speed: 2000,
       colors: [[255, 100]],
       ...rest,

@@ -83,7 +83,7 @@ class DeviceCard extends React.Component {
           </div>
           <div className="device-card__slider">
             <img src={speedIcon} alt="" />
-            <Slider disabled={isBlocked} value={speed} from={100} to={5000} onChange={this.setSpeed} />
+            <Slider disabled={isBlocked} value={speed} from={300} to={5000} onChange={this.setSpeed} />
           </div>
           {/* <button onClick={this.update}>update</button> */}
         </div>
