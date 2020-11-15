@@ -8,6 +8,7 @@
 #include "./WifiController.h"
 #include "./Owner.h"
 #include "./DeviceInfo.h"
+#include "./LightController.h"
 
 class SocketClient {
     public:
@@ -18,7 +19,7 @@ class SocketClient {
           /* webSocket.begin("192.168.100.114", 3000); */
           webSocket.on("connect", startConnection);
           webSocket.on("DEVICE:VERIFY_OWNER", verifyOwner);
-          /* webSocket.on("DEVICE:SET_STATE", setDeviceStatus); */
+          webSocket.on("DEVICE:SET_STATE", setDeviceStatus);
           webSocket.on("DEVICE:UPDATE_FIRMWARE", updateFirmware);
         }
 
@@ -57,6 +58,10 @@ class SocketClient {
         strcat(url, DEVICE_TYPE);
         /* ESPhttpUpdate.update("192.168.100.114", 3000, url); */
         ESPhttpUpdate.update("195.2.93.153", 80, url);
+      };
+
+      std::function<void (const char * payload, size_t length)> setDeviceStatus = [&](const char * payload, size_t length) {
+        lightController.parse(payload);
       };
 };
 

@@ -32,6 +32,13 @@ class DeviceCard extends React.Component {
     this.sendData(uid, { bright })
   }
 
+  setSpeed = _speed => {
+    const { uid, updateDevice } = this.props
+    const speed = Math.round(_speed)
+    updateDevice({ uid, speed })
+    this.sendData(uid, { speed })
+  }
+
   togglePower = () => {
     const { uid, enabled: _enabled, updateDevice } = this.props
     const enabled = !_enabled
@@ -40,7 +47,7 @@ class DeviceCard extends React.Component {
   }
 
   render () {
-    const { name, enabled, isOnline, bright, colors } = this.props
+    const { name, enabled, isOnline, bright, speed, colors } = this.props
     // const isBlocked = !isOnline || !enabled
     const isBlocked = false
     return (
@@ -76,7 +83,7 @@ class DeviceCard extends React.Component {
           </div>
           <div className="device-card__slider">
             <img src={speedIcon} alt="" />
-            <Slider disabled={isBlocked} from={-1} to={1} />
+            <Slider disabled={isBlocked} value={speed} from={100} to={5000} onChange={this.setSpeed} />
           </div>
           {/* <button onClick={this.update}>update</button> */}
         </div>

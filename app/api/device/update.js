@@ -4,8 +4,8 @@ const Device = require('$models/Device')
 const notify = require('$utils/notify')
 const { deviceList } = require('$sockets/actions')
 
-const fieldsToNotify = ['enabled', 'bright', 'colors']
-const fields = ['enabled', 'bright', 'colors']
+const fieldsToNotify = ['enabled', 'bright', 'speed', 'colors']
+const fields = ['enabled', 'bright', 'speed', 'colors']
 
 module.exports = async function update (req, res) {
   const { userId } = req.session

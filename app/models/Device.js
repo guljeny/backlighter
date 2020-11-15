@@ -21,7 +21,8 @@ module.exports = class Device {
       verified: false,
       createdAt: Date.now(),
       enabled: true,
-      bright: 255,
+      bright: 100,
+      speed: 2000,
       colors: [[255, 100]],
       ...rest,
     }
@@ -77,13 +78,13 @@ module.exports = class Device {
   }
 
   notify () {
-    const { uid, enabled, bright, colors } = this
+    const { uid, enabled, bright, colors, speed } = this
     const colorsStr = colors.map(color => {
       const [h, s] = color
       const { r, g, b } = colorsys.hsvToRgb(h, s, bright)
       return `${r}/${g}/${b}`
     }).join('|')
     console.log('colors', colorsStr)
-    notify.device(uid, deviceActions.setState, `${enabled ? 1 : 0}:${colorsStr}:${colors.length}`)
+    notify.device(uid, deviceActions.setState, `${enabled ? 1 : 0}:${colorsStr}:${colors.length}:${speed}`)
   }
 }
