@@ -34,7 +34,7 @@ class DeviceCard extends React.Component {
 
   setSpeed = _speed => {
     const { uid, updateDevice } = this.props
-    const speed = Math.round(_speed)
+    const speed = 5000 - Math.round(_speed)
     updateDevice({ uid, speed })
     this.sendData(uid, { speed })
   }
@@ -82,7 +82,12 @@ class DeviceCard extends React.Component {
           </div>
           <div className="device-card__slider">
             <img src={speedIcon} alt="" />
-            <Slider disabled={isBlocked} value={speed} from={300} to={5000} onChange={this.setSpeed} />
+            <Slider
+              disabled={isBlocked}
+              value={5000 - speed}
+              to={4700}
+              onChange={this.setSpeed}
+            />
           </div>
           {/* <button onClick={this.update}>update</button> */}
         </div>

@@ -84,7 +84,7 @@ module.exports = class Device {
       const { r, g, b } = colorsys.hsvToRgb(h, s, bright)
       return `${r}/${g}/${b}`
     }).join('|')
-    console.log('colors', colorsStr)
-    notify.device(uid, deviceActions.setState, `${enabled ? 1 : 0}:${colorsStr}:${colors.length}:${speed}`)
+    const data = `${enabled ? 1 : 0}:${colorsStr}:${colors.length}:${speed}`
+    notify.device(uid, deviceActions.setState, data)
   }
 }
